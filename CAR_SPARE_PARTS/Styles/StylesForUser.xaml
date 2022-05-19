@@ -1,0 +1,64 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="PageStyle" TargetType="Page">
+        <Setter Property="Background" Value="#0B0E1B"/>
+        <Setter Property="Foreground" Value="#0295DB"/>
+    </Style>
+
+    <Style x:Key="WindowStyle" TargetType="Window">
+        <Setter Property="Background" Value="#0B0E1B"/>
+        <Setter Property="Foreground" Value="#0295DB"/>
+    </Style>
+    
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#0295DB"/>
+        <Setter Property="Foreground" Value="#0B0E1B"/>
+        <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="10" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#00ABFF"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#0077B2"/>
+            </Trigger>
+        </Style.Triggers>
+        
+    </Style>
+
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="FontFamily" Value="Segoe UI Black"/>
+        <Setter Property="Background" Value="#161D28"/>
+        <Setter Property="Foreground" Value="#B92970"/>
+        <Setter Property="MaxLength" Value="20"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="Foreground" Value="#0077B2"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#00ABFF"/>
+            </Trigger>
+            
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox">
+        <Setter Property="FontFamily" Value="Segoe UI Black"/>
+        <Setter Property="Background" Value="#161D28"/>
+        <Setter Property="Foreground" Value="#B92970"/>
+        <Setter Property="MaxLength" Value="20"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    
+</ResourceDictionary>
