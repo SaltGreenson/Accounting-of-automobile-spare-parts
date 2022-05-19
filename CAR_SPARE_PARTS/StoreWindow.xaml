@@ -24,13 +24,19 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
-                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель: Мерседес"/>
-                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 30, 0" Text="{Binding Path=PricePerPiece}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель:"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" Margin="57, 0, 0, 0" VerticalAlignment="Center" Text="{Binding Path=CarBrand}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 30, 0" Text="{Binding Path=Price}"/>
                         <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
-                        <TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" Text="{Binding Path=DateOfManufacture}"/>
-                        <TextBlock Grid.Column="3" Grid.Row="0" FontSize="10" TextAlignment="Right" VerticalAlignment="Center" Text="Неоригинальная запчасть"/>
-                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Количество: 10шт."/>
-                        <CheckBox Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" Text="{Binding Path=Date}"/>
+                        <TextBlock Grid.Column="3" Grid.Row="2" FontSize="10" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Path=Type}"/>
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="В наличии: "/>
+                        <TextBlock Name="quantityTextBlock" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 50, 0" VerticalAlignment="Center" Text="{Binding Path=Quantity}"/>
+                        <!--<TextBox Name="quantityTextBox"/>-->
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 28, 0" VerticalAlignment="Center" Text="шт."/>
+                        <CheckBox Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="124,0,0,0" Width="15"/>
+                        <Button  Name="editItemButton" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="&#x270e;" Margin="0, 0, 25, 0" Width="20" Height="20"/>
+                        <Button  Name="deleteItemButton" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="✕" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="20" Height="20"/>
                     </Grid>
 
                 </DataTemplate>

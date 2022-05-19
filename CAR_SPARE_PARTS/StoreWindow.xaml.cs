@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CAR_SPARE_PARTS.Models.Store;
+using CAR_SPARE_PARTS.Classes;
 
 namespace CAR_SPARE_PARTS
 {
@@ -32,6 +33,37 @@ namespace CAR_SPARE_PARTS
             Application.Current.Resources.MergedDictionaries.Add(resourceDict);
         }
 
+        private string GetCarBrand(int id)
+        {
+            using (var dbContext = new CarBrandContext())
+            {
+                var car = dbContext.CarBrands.Where(c => c.ID == id);
+                return car.Count() > 0? car.First().Brand : "Отсутсвует";
+            }
+        }
+
+        private string GetProductType(bool type) => type ? "Оригинальная запчасть" : "Неоригинальная запчасть";
+
+        private void FillListBox()
+        {
+            using (var dbContext = new ProductContext())
+            {
+                var products = dbContext.Products;
+                foreach (Product product in products)
+                {
+                    productsListBox.Items.Add(new ProductView
+                    {
+                        Title = product.Title,
+                        CarBrand = GetCarBrand(product.CarBrandID),
+                        Price = Math.Round(product.PricePerPiece, 2),
+                        Date = product.DateOfManufacture,
+                        Type = GetProductType(product.Type),
+                        Quantity = product.Quantity
+                    });
+                }
+            }
+        }
+
         public StoreWindow(bool isAdmin)
         {
             InitializeComponent();
@@ -45,15 +77,7 @@ namespace CAR_SPARE_PARTS
             {
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
-            using (var dbContext = new ProductContext())
-            {
-                IQueryable<Product> products = dbContext.Products;
-                foreach(Product product in products)
-                {
-                    productsListBox.Items.Add(product);
-                }
-            }
-            
+            FillListBox();
             //DataContext = new ViewModel();
         }
 
@@ -66,6 +90,34 @@ namespace CAR_SPARE_PARTS
             MainWindow mw = new MainWindow();
             SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             mw.Show();
+            
         }
+
+        private void productsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string str = productsListBox.SelectedValue.ToString();
+        }
+
+
+        private childItem FindVisualChild<childItem>(DependencyObject obj) where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                {
+                    return (childItem)child;
+                }
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
+
+
     }
 }

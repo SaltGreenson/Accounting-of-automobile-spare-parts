@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\ProductView.cs" />
     <Compile Include="Models\Store\CarBrand.cs" />
     <Compile Include="Models\Store\CarBrandContext.cs" />
     <Compile Include="Models\Store\Cart.cs" />
