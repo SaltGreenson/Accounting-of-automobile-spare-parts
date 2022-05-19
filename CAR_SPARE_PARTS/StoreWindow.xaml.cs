@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CAR_SPARE_PARTS.Models.ViewModel;
 using CAR_SPARE_PARTS.Models.Store;
 
 namespace CAR_SPARE_PARTS
@@ -24,7 +23,6 @@ namespace CAR_SPARE_PARTS
         public StoreWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
         }
 
         private void SwitchTheme(Uri uri)
@@ -47,8 +45,16 @@ namespace CAR_SPARE_PARTS
             {
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
+            using (var dbContext = new ProductContext())
+            {
+                IQueryable<Product> products = dbContext.Products;
+                foreach(Product product in products)
+                {
+                    productsListBox.Items.Add(product);
+                }
+            }
             
-            DataContext = new ViewModel();
+            //DataContext = new ViewModel();
         }
 
         private void Window_Closing(object sender, EventArgs e)

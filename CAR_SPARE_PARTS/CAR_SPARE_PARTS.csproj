@@ -71,9 +71,6 @@
     <Compile Include="Models\Store\CartContext.cs" />
     <Compile Include="Models\Store\Product.cs" />
     <Compile Include="Models\Store\ProductContext.cs" />
-    <Compile Include="Models\ViewModel\ProductViewModel.cs" />
-    <Compile Include="Models\ViewModel\RelayCommand.cs" />
-    <Compile Include="Models\ViewModel\ViewModel.cs" />
     <Compile Include="Pages\StorePage.xaml.cs">
       <DependentUpon>StorePage.xaml</DependentUpon>
     </Compile>

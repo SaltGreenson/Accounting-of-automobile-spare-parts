@@ -5,54 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
-        Title="StoreWindow" Height="490" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="14" />
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
-    </Window.Resources>
+        Title="StoreWindow" Height="490" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        Style="{DynamicResource WindowStyle}">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0.8*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="0.2*" />
-        </Grid.RowDefinitions>
-        <ListBox x:Name="ListBoxProducts" Grid.Column="0" ItemsSource="{Binding ProductsObsCollection}"
-                 SelectedItem="{Binding SelectedProduct}">
+        <ListBox x:Name="productsListBox" Margin="204,40,204,39">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
                         <TextBlock FontSize="18" Text="{Binding Path=Title}" />
-                        <TextBlock Text="{Binding Path=CarBrandID}" />
-                        <TextBlock Text="{Binding Path=Type}" />
+                        <TextBlock FontSize="16" Text="{Binding Path=PricePerPiece}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=DateOfManufacture}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Command="{Binding AddCommand}">+</Button>
-            <Button Command="{Binding RemoveCommand}"
-                    CommandParameter="{Binding SelectedPhone}">-</Button>
-        </StackPanel>
-
-        <StackPanel Grid.Column="1" DataContext="{Binding SelectedProduct}">
-            <TextBlock Text="Выбранный элемент"  />
-            <TextBlock Text="Модель" />
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Text="Производитель" />
-            <TextBox Text="{Binding CarBrandID, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Text="Цена" />
-            <TextBox Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}" />
-        </StackPanel>
     </Grid>
 </Window>
