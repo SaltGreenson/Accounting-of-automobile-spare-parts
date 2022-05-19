@@ -5,17 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
-        Title="StoreWindow" Height="490" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        Title="StoreWindow" Height="1000" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         Style="{DynamicResource WindowStyle}">
     <Grid>
-        <ListBox x:Name="productsListBox" Margin="204,40,204,39">
+        <ListBox x:Name="productsListBox" Margin="106,112,106,93" d:ItemsSource="{d:SampleData ItemCount=10}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="18" Text="{Binding Path=Title}" />
-                        <TextBlock FontSize="16" Text="{Binding Path=PricePerPiece}" />
-                        <TextBlock FontSize="14" Text="{Binding Path=DateOfManufacture}" />
-                    </StackPanel>
+                    <Grid Width="555" Height="90">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="138.75*"/>
+                            <ColumnDefinition Width="138.75"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="138.75"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель: Мерседес"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 30, 0" Text="{Binding Path=PricePerPiece}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
+                        <TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" Text="{Binding Path=DateOfManufacture}"/>
+                        <TextBlock Grid.Column="3" Grid.Row="0" FontSize="10" TextAlignment="Right" VerticalAlignment="Center" Text="Неоригинальная запчасть"/>
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Количество: 10шт."/>
+                        <CheckBox Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
