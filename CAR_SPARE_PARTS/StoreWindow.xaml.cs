@@ -78,6 +78,7 @@ namespace CAR_SPARE_PARTS
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
             FillListBox();
+           
             //DataContext = new ViewModel();
         }
 
