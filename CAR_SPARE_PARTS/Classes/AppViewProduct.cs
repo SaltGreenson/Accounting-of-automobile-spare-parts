@@ -39,7 +39,27 @@ namespace CAR_SPARE_PARTS.Classes
 
         public AppViewProduct()
         {
-            ProductsObsCollection = new ObservableCollection<ProductView>();
+            using (var dbContext = new ProductContext())
+            {
+                IQueryable<Product> products = dbContext.Products;
+                ProductsObsCollection = new ObservableCollection<ProductView>();
+
+                foreach (Product product in products)
+                {
+                    ProductsObsCollection.Insert(0, new ProductView
+                    {
+                        Title = product.Title,
+                        CarBrand = GetCarBrand(product.CarBrandID),
+                        Price = Math.Round(product.PricePerPiece, 2),
+                        Date = product.DateOfManufacture,
+                        Type = GetProductType(product.Type),
+                        Quantity = product.Quantity
+                    });
+
+                }
+                
+            }
+            
         }
 
         public RelayCommand AddProductCommand

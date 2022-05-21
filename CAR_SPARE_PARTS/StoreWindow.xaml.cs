@@ -50,7 +50,7 @@ namespace CAR_SPARE_PARTS
             {
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
-            FillListBox();
+            //FillListBox();
             
             DataContext = new AppViewProduct();
         }
@@ -69,7 +69,7 @@ namespace CAR_SPARE_PARTS
 
         private void productsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string str = productsListBox.SelectedValue.ToString();
+            //string str = productsListBox.SelectedValue.ToString();
         }
 
 
@@ -94,8 +94,8 @@ namespace CAR_SPARE_PARTS
 
         private void deleteItemButton_Click(object sender, RoutedEventArgs e)
         {
-            ProductView product = productsListBox.SelectedItem as ProductView;
-            MessageBox.Show(product.Title);
+            //ProductView product = productsListBox.SelectedItem as ProductView;
+            //MessageBox.Show(product.Title);
         }
     }
 }
