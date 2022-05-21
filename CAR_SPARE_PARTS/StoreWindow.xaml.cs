@@ -13,12 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CAR_SPARE_PARTS.Models.Store;
 using CAR_SPARE_PARTS.Classes;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace CAR_SPARE_PARTS
 {
-    /// <summary>
-    /// Interaction logic for StoreWindow.xaml
-    /// </summary>
     public partial class StoreWindow : Window
     {
         public StoreWindow()
@@ -33,35 +32,9 @@ namespace CAR_SPARE_PARTS
             Application.Current.Resources.MergedDictionaries.Add(resourceDict);
         }
 
-        private string GetCarBrand(int id)
-        {
-            using (var dbContext = new CarBrandContext())
-            {
-                var car = dbContext.CarBrands.Where(c => c.ID == id);
-                return car.Count() > 0? car.First().Brand : "Отсутсвует";
-            }
-        }
-
-        private string GetProductType(bool type) => type ? "Оригинальная запчасть" : "Неоригинальная запчасть";
-
         private void FillListBox()
         {
-            using (var dbContext = new ProductContext())
-            {
-                var products = dbContext.Products;
-                foreach (Product product in products)
-                {
-                    productsListBox.Items.Add(new ProductView
-                    {
-                        Title = product.Title,
-                        CarBrand = GetCarBrand(product.CarBrandID),
-                        Price = Math.Round(product.PricePerPiece, 2),
-                        Date = product.DateOfManufacture,
-                        Type = GetProductType(product.Type),
-                        Quantity = product.Quantity
-                    });
-                }
-            }
+           
         }
 
         public StoreWindow(bool isAdmin)
@@ -78,8 +51,8 @@ namespace CAR_SPARE_PARTS
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
             FillListBox();
-           
-            //DataContext = new ViewModel();
+            
+            DataContext = new AppViewProduct();
         }
 
         private void Window_Closing(object sender, EventArgs e)
@@ -119,6 +92,10 @@ namespace CAR_SPARE_PARTS
             return null;
         }
 
-
+        private void deleteItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            ProductView product = productsListBox.SelectedItem as ProductView;
+            MessageBox.Show(product.Title);
+        }
     }
 }

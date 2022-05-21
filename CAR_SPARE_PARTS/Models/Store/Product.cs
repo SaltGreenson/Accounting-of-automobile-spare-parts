@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CAR_SPARE_PARTS.Classes;
 
 namespace CAR_SPARE_PARTS.Models.Store
 {
@@ -32,6 +33,11 @@ namespace CAR_SPARE_PARTS.Models.Store
             DateOfManufacture = dateOfManufacture;
             Quantity = quantity;
             PricePerPiece = pricePerPiece;
+        }
+
+        public static implicit operator Product(RelayCommand v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
