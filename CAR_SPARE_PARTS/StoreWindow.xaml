@@ -9,24 +9,24 @@
         Style="{DynamicResource WindowStyle}">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="97"/>
             <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="97"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
             <RowDefinition Height="300*"/>
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="productsListBox" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding XPath=SelectedProduct}" ItemsSource="{Binding XPath=ProductsObsCollection}" Style="{DynamicResource ListBoxStyle}" >
+        <ListBox x:Name="productsListBox" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding ProductsList}" Style="{DynamicResource ListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="555" Height="90">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="138.75*"/>
-                            <ColumnDefinition Width="138.75"/>
+                            <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="40"/>
-                            <ColumnDefinition Width="138.75"/>
+                            <ColumnDefinition Width="157.5"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
@@ -34,23 +34,25 @@
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
+                        <TextBox Name="titleTextBox" MaxLength="25" Width="250" Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Title}" />
                         <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель:"/>
-                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" Margin="57, 0, 0, 0" VerticalAlignment="Center" Text="{Binding Path=CarBrand}"/>
-                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 30, 0" Text="{Binding Path=Price}"/>
+                        <!--<TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" Margin="57, 0, 0, 0" VerticalAlignment="Center" Text="{Binding Path=CarBrand}"/>-->
+                        <TextBox Name="carBrandTextBox" MaxLength="20" Width="100" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="57, 0, 0, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=CarBrand}" />
+                        <!--<TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Margin="0, 0, 30, 0" Text="{Binding Path=Price}"/>-->
+                        <TextBox Name="priceTextBox" MaxLength="5" Width="50" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Price}" />
                         <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
-                        <TextBlock Grid.Column="0" Grid.Row="2" FontSize="10" VerticalAlignment="Bottom" Text="{Binding Path=Date}"/>
-                        <TextBlock Grid.Column="3" Grid.Row="2" FontSize="10" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Path=Type}"/>
+                        <TextBox Name="dateTextBox" FontSize="11" Width="65" Height="25" MaxLength="10" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Center" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Date}" />
+                        <TextBox Name="typeTextBox"  FontSize="11" Height="25" Width="145" MaxLength="21" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Center" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Type}" />
                         <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="В наличии: "/>
-                        <TextBlock Name="quantityTextBlock" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 50, 0" VerticalAlignment="Center" Text="{Binding Path=Quantity}"/>
-                        <TextBox Name="quantityTextBox"/>
+                        <TextBox Name="quantityTextBox" MaxLength="4" Width="35" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 50, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Quantity}" />
                         <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 28, 0" VerticalAlignment="Center" Text="шт."/>
-                        <CheckBox Grid.Column="3" Grid.Row="1" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="124,0,0,0" Width="15"/>
-                        <Button Style="{DynamicResource ButtonStyle}" Name="editItemButton" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="&#x270e;" Margin="0, 0, 25, 0" Width="20" Height="20"/>
-                        <Button Style="{DynamicResource ButtonStyle}" Click="deleteItemButton_Click" Name="deleteItemButton" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="✕" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="20" Height="20"/>
+                        <CheckBox Grid.Column="3" Grid.Row="1" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15"/>
+                        <Button Style="{DynamicResource ButtonStyle}" Name="editItemButton" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="&#x270e;" Margin="0, 0, 25, 0" Width="20" Height="20" Click="editItemButton_Click"/>
+                        <Button Style="{DynamicResource ButtonStyle}" Name="deleteItemButton" Click="deleteItemButton_Click" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="✕" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="20" Height="20"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Style="{DynamicResource ButtonStyle}" Command="{Binding AddProductCommand}" Grid.Column="1" Grid.Row="2" Width="250" Height="60" Content="Добавить деталь" FontSize="24"/>
+        <Button Style="{DynamicResource ButtonStyle}" Click="AddProduct_click" Grid.Column="1" Grid.Row="2" Width="250" Height="60" Content="Добавить деталь" FontSize="24"/>
     </Grid>
 </Window>

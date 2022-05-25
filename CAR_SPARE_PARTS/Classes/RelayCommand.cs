@@ -29,6 +29,8 @@ namespace CAR_SPARE_PARTS.Classes
             return this.canExecute == null || this.canExecute(parameter);
         }
 
+
+
         public void Execute(object parameter)
         {
             this.execute(parameter);

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CAR_SPARE_PARTS.Models.Store;
 
 namespace CAR_SPARE_PARTS.Classes
@@ -14,7 +15,7 @@ namespace CAR_SPARE_PARTS.Classes
     {
         private ProductView selectedProduct;
 
-        public ObservableCollection<ProductView> ProductsObsCollection { get; set; }
+        public List<ProductView> ProductsList { get; set; }
 
         private event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -35,18 +36,17 @@ namespace CAR_SPARE_PARTS.Classes
         private string GetProductType(bool type) => type ? "Оригинальная запчасть" : "Неоригинальная запчасть";
 
 
-        private RelayCommand addProductCommand;
 
         public AppViewProduct()
         {
             using (var dbContext = new ProductContext())
             {
                 IQueryable<Product> products = dbContext.Products;
-                ProductsObsCollection = new ObservableCollection<ProductView>();
+                ProductsList = new List<ProductView>();
 
                 foreach (Product product in products)
                 {
-                    ProductsObsCollection.Insert(0, new ProductView
+                    ProductsList.Add(new ProductView
                     {
                         Title = product.Title,
                         CarBrand = GetCarBrand(product.CarBrandID),
@@ -57,47 +57,40 @@ namespace CAR_SPARE_PARTS.Classes
                     });
 
                 }
-                
+                OnPropertyChanged("ProductsObsCollection");
             }
             
         }
 
-        public RelayCommand AddProductCommand
+        public void AddProduct()
         {
-            get
+            Product pr = new Product
             {
-                return addProductCommand ??
-                    (addProductCommand = new RelayCommand(obj =>
-                    {
-                        Product pr = new Product
-                        {
-                            Title = "Новая деталь",
-                            Type = false,
-                            CarBrandID = 0,
-                            DateOfManufacture = "1970-01-01",
-                            PricePerPiece = 0,
-                            Quantity = 0
-                        };
+                Title = "Новая деталь",
+                Type = false,
+                CarBrandID = 0,
+                DateOfManufacture = "1970-01-01",
+                PricePerPiece = 0,
+                Quantity = 0
+            };
 
-                        ProductView prView = new ProductView
-                        {
-                            Title = pr.Title,
-                            CarBrand = GetCarBrand(pr.CarBrandID),
-                            Price = Math.Round(pr.PricePerPiece, 2),
-                            Date = pr.DateOfManufacture,
-                            Type = GetProductType(pr.Type),
-                            Quantity = pr.Quantity
-                        };
+            ProductView prView = new ProductView
+            {
+                Title = pr.Title,
+                CarBrand = GetCarBrand(pr.CarBrandID),
+                Price = Math.Round(pr.PricePerPiece, 2),
+                Date = pr.DateOfManufacture,
+                Type = GetProductType(pr.Type),
+                Quantity = pr.Quantity
+            };
 
-                        ProductsObsCollection.Insert(0, prView);
-                        using (var dbContext = new ProductContext())
-                        {
-                            dbContext.Products.Add(pr);
-                            dbContext.SaveChanges();
-                        }
-                        SelectedProduct = prView;
-                    }));
+            ProductsList.Add(prView);
+            using (var dbContext = new ProductContext())
+            {
+                dbContext.Products.Add(pr);
+                dbContext.SaveChanges();
             }
+            SelectedProduct = prView;
         }
 
         public ProductView SelectedProduct

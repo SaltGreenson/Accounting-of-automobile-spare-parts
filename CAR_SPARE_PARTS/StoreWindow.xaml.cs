@@ -20,6 +20,8 @@ namespace CAR_SPARE_PARTS
 {
     public partial class StoreWindow : Window
     {
+        AppViewProduct avp;
+        private bool IsAdmin { get; set; }
         public StoreWindow()
         {
             InitializeComponent();
@@ -41,7 +43,7 @@ namespace CAR_SPARE_PARTS
         {
             InitializeComponent();
             this.Closing += Window_Closing;
-
+            IsAdmin = isAdmin;
             if (isAdmin)
             {
                 SwitchTheme(new Uri("./Styles/StylesForAdmin.xaml", UriKind.Relative));
@@ -51,8 +53,8 @@ namespace CAR_SPARE_PARTS
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
             //FillListBox();
-            
-            DataContext = new AppViewProduct();
+            avp = new AppViewProduct();
+            DataContext = avp;
         }
 
         private void Window_Closing(object sender, EventArgs e)
@@ -69,6 +71,9 @@ namespace CAR_SPARE_PARTS
 
         private void productsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (IsAdmin)
+            {
+            }
             //string str = productsListBox.SelectedValue.ToString();
         }
 
@@ -92,10 +97,21 @@ namespace CAR_SPARE_PARTS
             return null;
         }
 
+        private void AddProduct_click(object sender, RoutedEventArgs e)
+        {
+            avp.AddProduct();
+            productsListBox.Items.Refresh();
+        }
+
         private void deleteItemButton_Click(object sender, RoutedEventArgs e)
         {
             //ProductView product = productsListBox.SelectedItem as ProductView;
             //MessageBox.Show(product.Title);
+        }
+
+        private void editItemButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

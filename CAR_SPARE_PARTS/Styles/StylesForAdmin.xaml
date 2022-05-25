@@ -46,6 +46,15 @@
 
     </Style>
 
+
+    <Style x:Key="TextBoxStyleListBoxItem" TargetType="TextBox">
+        <Setter Property="Background" Value="#212121"/>
+        <Setter Property="Foreground" Value="#E18B5D"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+    </Style>
+
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Segoe UI Black"/>
         <Setter Property="Background" Value="#E18B5D"/>

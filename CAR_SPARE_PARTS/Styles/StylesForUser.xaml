@@ -48,6 +48,15 @@
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
+    <Style x:Key="TextBoxStyleListBoxItem" TargetType="TextBox">
+        <Setter Property="Background" Value="#161D28"/>
+        <Setter Property="Foreground" Value="#B92970"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+    </Style>
+
+
     <Style x:Key="CheckBoxStyle" TargetType="CheckBox">
         <Setter Property="Background" Value="#B92970"/>
         <Setter Property="BorderBrush" Value="#000000"/>
