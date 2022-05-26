@@ -72,10 +72,11 @@
     <Compile Include="Models\Store\CarBrandContext.cs" />
     <Compile Include="Models\Store\Cart.cs" />
     <Compile Include="Models\Store\CartContext.cs" />
+    <Compile Include="Models\Store\CartProductList.cs" />
     <Compile Include="Models\Store\Product.cs" />
     <Compile Include="Models\Store\ProductContext.cs" />
-    <Compile Include="Pages\StorePage.xaml.cs">
-      <DependentUpon>StorePage.xaml</DependentUpon>
+    <Compile Include="Pages\CartPage.xaml.cs">
+      <DependentUpon>CartPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="StoreWindow.xaml.cs">
       <DependentUpon>StoreWindow.xaml</DependentUpon>
@@ -100,15 +101,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\CartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SignIn.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SignUp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\StorePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

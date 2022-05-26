@@ -12,20 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CAR_SPARE_PARTS.Models.Store;
-
 
 namespace CAR_SPARE_PARTS.Pages
 {
     /// <summary>
-    /// Interaction logic for StorePage.xaml
+    /// Interaction logic for CartPage.xaml
     /// </summary>
-    public partial class StorePage : Page
+    public partial class CartPage : Page
     {
-
-        public StorePage()
+        public CartPage()
         {
             InitializeComponent();
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+         
         }
     }
 }

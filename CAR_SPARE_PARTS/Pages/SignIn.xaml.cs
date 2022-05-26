@@ -35,11 +35,11 @@ namespace CAR_SPARE_PARTS.Pages
                 if (login.Length > 0 && password.Length > 0)
                 {
                     Autorize autorize = new Autorize(login, password);
-                    (string, bool, bool) signIn = autorize.SignIn();
+                    (string, bool, bool, int) signIn = autorize.SignIn();
                     if (signIn.Item2)
                     {
                         
-                        StoreWindow storeWindow = new StoreWindow(signIn.Item3);
+                        StoreWindow storeWindow = new StoreWindow(signIn.Item3, signIn.Item4);
                         storeWindow.Show();
                         MessageBox.Show(signIn.Item3? $"Вы вошли в приложение под логином администратора \"{login}\"" : $"Вы вошли в приложение под логином пользователя \"{login}\".", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                         Application.Current.MainWindow.Close();

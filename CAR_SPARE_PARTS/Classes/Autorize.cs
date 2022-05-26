@@ -29,18 +29,19 @@ namespace CAR_SPARE_PARTS
             Password = password;
         }
 
-        public (string,bool, bool) SignIn()
+        public (string,bool, bool, int) SignIn()
         {
+            IQueryable<User> currentUser;
             using (var dbContext = new UserContext())
             {
-                IQueryable<User> currentUser = dbContext.Users.Where(user => user.Login == Login);
+                currentUser = dbContext.Users.Where(user => user.Login == Login);
                 if (currentUser.Count() > 0)
                 {
                     User user = currentUser.First();
-                    return (user.Password == Password? $"Пользователь {user.Login} успешно вошел в программу" : $"Неверный пароль", user.Password == Password, user.IsAdministrator);
+                    return (user.Password == Password? $"Пользователь {user.Login} успешно вошел в программу" : $"Неверный пароль", user.Password == Password, user.IsAdministrator, user.CartID);
                 }
             }
-            return ($"Неверный логин", false, false);
+            return ($"Неверный логин", false, false, currentUser.First().CartID);
         }
 
         public (string, bool) SignUp()

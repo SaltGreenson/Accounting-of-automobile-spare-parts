@@ -33,7 +33,23 @@ namespace CAR_SPARE_PARTS.Classes
             }
         }
 
+        private int FindAndUpdateCarBrand(string carBrand)
+        {
+            using (var dbContext = new CarBrandContext())
+            {
+                var cb = dbContext.CarBrands.Where(c => c.Brand == carBrand);
+                if (cb.Count() <= 0)
+                {
+                    dbContext.CarBrands.Add(new CarBrand { Brand = carBrand });
+                    dbContext.SaveChanges();
+                    return dbContext.CarBrands.Where(c => c.Brand == carBrand).First().ID;
+                }
+                return cb.First().ID;
+            }
+        }
+
         private string GetProductType(bool type) => type ? "Оригинальная запчасть" : "Неоригинальная запчасть";
+        private bool GetProductType(string type) => type == "Оригинальная запчасть"? true : false;
 
 
 
@@ -61,6 +77,41 @@ namespace CAR_SPARE_PARTS.Classes
                 OnPropertyChanged("ProductsObsCollection");
             }
             
+        }
+
+        public void EditProduct()
+        {
+            using (var dbContext = new ProductContext())
+            {
+                Product pr = dbContext.Products.Where(p => p.ID == SelectedProduct.ID).First();
+                int carBrandId = FindAndUpdateCarBrand(SelectedProduct.CarBrand);
+                pr.CarBrandID = carBrandId;
+                pr.Title = SelectedProduct.Title;
+                pr.Quantity = SelectedProduct.Quantity;
+                pr.DateOfManufacture = SelectedProduct.Date;
+                pr.PricePerPiece = SelectedProduct.Price;
+                pr.Type = GetProductType(SelectedProduct.Type);
+                dbContext.SaveChanges();
+                SelectedProduct.Type = GetProductType(pr.Type);
+                OnPropertyChanged("SelectedProduct");
+
+            }
+
+        }
+
+        public void AddProductToCart(int quantity, int userCartId)
+        {
+            using (var dbCartContext = new CartContext())
+            {
+                Cart cart = dbCartContext.Carts.Where(c => c.ID == userCartId).First();
+                using (var dbProductContext = new ProductContext())
+                {
+                    // нужно добавить таблицу в бд "CartProductList"
+                    // добавить создание листа при создании пользователя
+                    // тут нужно будет достать id листа продуктов и в нем искать продукты
+                    // если продукты будут то увеличивать счетчик, если нет то добавлять новый продукт в "CartProductList"
+                }
+            }
         }
 
         public void AddProduct()

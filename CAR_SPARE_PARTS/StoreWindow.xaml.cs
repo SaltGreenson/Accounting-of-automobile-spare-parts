@@ -22,6 +22,7 @@ namespace CAR_SPARE_PARTS
     {
         AppViewProduct avp;
         private bool IsAdmin { get; set; }
+        private int UserCartId { get; set; }
         private int SelectedIndex { get; set; }
         private bool IsEditMode { get; set; }
         private bool WasWarning { get; set; }
@@ -36,11 +37,12 @@ namespace CAR_SPARE_PARTS
             Application.Current.Resources.Clear();
             Application.Current.Resources.MergedDictionaries.Add(resourceDict);
         }
-        public StoreWindow(bool isAdmin)
+        public StoreWindow(bool isAdmin, int userCartId)
         {
             InitializeComponent();
             this.Closing += Window_Closing;
             IsAdmin = isAdmin;
+            UserCartId = userCartId;
             if (isAdmin)
             {
                 SwitchTheme(new Uri("./Styles/StylesForAdmin.xaml", UriKind.Relative));
@@ -71,10 +73,14 @@ namespace CAR_SPARE_PARTS
 
         private void productsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (IsEditMode && productsListBox.SelectedIndex != SelectedIndex)
+            if (IsAdmin && IsEditMode && productsListBox.SelectedIndex != SelectedIndex)
             {
                 productsListBox.SelectedIndex = SelectedIndex;
                 MessageBox.Show("Для начала вам нужно сохранить изменения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            } else
+            {
+                addToCartGrid.Visibility = Visibility.Visible;
+                addToCartQuantity.Text = "1";
             }
         }
 
@@ -132,36 +138,81 @@ namespace CAR_SPARE_PARTS
                 IsEditMode = true;
             } else
             {
-                MessageBox.Show("Вам необходимо выбрать элемент перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void textChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-
-                
-                string text = ((TextBox)sender).Text.Substring(0, ((TextBox)sender).Text.Length - 1);
-                if (text != avp.SelectedProduct.Type || text != avp.SelectedProduct.Title || text != avp.SelectedProduct.Price.ToString() || text != avp.SelectedProduct.CarBrand || text != avp.SelectedProduct.Date || text != avp.SelectedProduct.Quantity.ToString())
-                {
-                    MessageBox.Show("Изменяемое поле не совпадает с текущим выбранным элементом", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    if (!WasWarning)
-                        ((TextBox)sender).Text = text;
-                    else
-                        WasWarning = true;
-                }
-            } catch (Exception ex)
-            {
-                MessageBox.Show("Сначала нужно выбрать элемент", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Вам необходимо выбрать деталь перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void confirmItemButton_Click(object sender, RoutedEventArgs e)
         {
-            confirmItemButton.Visibility = Visibility.Hidden;
-            editProductBorder.Visibility = Visibility.Hidden;
-            IsEditMode = false;
+            bool fl = false;
+            if (avp.SelectedProduct.Quantity <= 0)
+            {
+                MessageBox.Show("Количество запчастей не может быть равно нулю", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                fl = true;
+            }
+            if (avp.SelectedProduct.Title.Length <= 2 || avp.SelectedProduct.CarBrand.Length <= 2)
+            {   
+                MessageBox.Show("Поля должны быть заполнены корректно", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                fl = true;
+            }
+            try
+            {
+                DateTime date = Convert.ToDateTime(avp.SelectedProduct.Date);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Поле \"Дата\" не может иметь данный формат", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                fl = true;
+            }
+            if (!fl)
+            {
+                confirmItemButton.Visibility = Visibility.Hidden;
+                editProductBorder.Visibility = Visibility.Hidden;
+                IsEditMode = false;
+                avp.EditProduct();
+                productsListBox.Items.Refresh();
+            }
+            
+        }
+
+        private void GoToCart(object sender, RoutedEventArgs e)
+        {
+            searchItemsGrid.Visibility = Visibility.Hidden;
+            _frame.Visibility = Visibility.Visible;
+            goBackTextBlock.Visibility = Visibility.Visible;
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            _frame.Visibility = Visibility.Hidden;
+            searchItemsGrid.Visibility = Visibility.Visible;
+            goBackTextBlock.Visibility = Visibility.Hidden;
+
+        }
+
+        private void addProductToCart_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int quantity = Convert.ToInt32(addToCartQuantity.Text);
+                quantity = quantity <= avp.SelectedProduct.Quantity? quantity : avp.SelectedProduct.Quantity;
+                addToCartQuantity.Text = quantity.ToString();
+                if (quantity > 0)
+                {
+
+                    MessageBox.Show($"В корзину было добавлено \"{avp.SelectedProduct.Title}\": {quantity}шт.\nЧтобы перейти в корзину нажмите на икноку \"Корзина\"", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Неверно введены данные", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            addToCartGrid.Visibility = Visibility.Hidden;
+            addToCartQuantity.Text = "";
         }
     }
 }

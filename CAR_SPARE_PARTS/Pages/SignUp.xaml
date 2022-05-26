@@ -18,6 +18,8 @@
         <TextBlock HorizontalAlignment="Left" Margin="62,254,0,0" TextWrapping="Wrap" Text="Повторите пароль" VerticalAlignment="Top" Height="39" Width="293" FontFamily="Segoe UI Black" FontSize="30"/>
         <PasswordBox x:Name="passwordTextBox" Style="{DynamicResource PasswordBoxStyle}" HorizontalAlignment="Left" FontSize="28" Margin="62,211,0,0" VerticalAlignment="Top" Width="664" Height="36"/>
         <PasswordBox x:Name="repeatPasswordTextBox" Style="{DynamicResource PasswordBoxStyle}" HorizontalAlignment="Left" FontSize="28" Margin="62,299,0,0" VerticalAlignment="Top" Width="664" Height="36"/>
-        
+        <TextBlock Foreground="Gray" TextDecorations="None" Margin="10, 25, 0, 0" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="26">
+            <Hyperlink NavigateUri="SignIn.xaml" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128281;</Label></Hyperlink>
+        </TextBlock>
     </Grid>
 </Page>
