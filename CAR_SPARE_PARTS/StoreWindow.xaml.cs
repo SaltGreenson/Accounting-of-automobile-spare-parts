@@ -22,6 +22,9 @@ namespace CAR_SPARE_PARTS
     {
         AppViewProduct avp;
         private bool IsAdmin { get; set; }
+        private int SelectedIndex { get; set; }
+        private bool IsEditMode { get; set; }
+        private bool WasWarning { get; set; }
         public StoreWindow()
         {
             InitializeComponent();
@@ -33,12 +36,6 @@ namespace CAR_SPARE_PARTS
             Application.Current.Resources.Clear();
             Application.Current.Resources.MergedDictionaries.Add(resourceDict);
         }
-
-        private void FillListBox()
-        {
-           
-        }
-
         public StoreWindow(bool isAdmin)
         {
             InitializeComponent();
@@ -47,13 +44,16 @@ namespace CAR_SPARE_PARTS
             if (isAdmin)
             {
                 SwitchTheme(new Uri("./Styles/StylesForAdmin.xaml", UriKind.Relative));
+                deleteItemButton.Visibility = Visibility.Visible;
+                addProductButton.Visibility = Visibility.Visible;
+                editItemButton.Visibility = Visibility.Visible;
             }
             else
             {
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
-            //FillListBox();
             avp = new AppViewProduct();
+            IsEditMode = false;
             DataContext = avp;
         }
 
@@ -71,10 +71,11 @@ namespace CAR_SPARE_PARTS
 
         private void productsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (IsAdmin)
+            if (IsEditMode && productsListBox.SelectedIndex != SelectedIndex)
             {
+                productsListBox.SelectedIndex = SelectedIndex;
+                MessageBox.Show("Для начала вам нужно сохранить изменения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            //string str = productsListBox.SelectedValue.ToString();
         }
 
 
@@ -105,13 +106,62 @@ namespace CAR_SPARE_PARTS
 
         private void deleteItemButton_Click(object sender, RoutedEventArgs e)
         {
-            //ProductView product = productsListBox.SelectedItem as ProductView;
-            //MessageBox.Show(product.Title);
+            if (productsListBox.SelectedItem != null)
+            {
+                ProductView product = productsListBox.SelectedItem as ProductView;
+                MessageBoxResult res = MessageBox.Show($"Вы действительно хотите удалить \"{product.Title}\"?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (res == MessageBoxResult.Yes)
+                {
+                    avp.DeleteProduct(product);
+                    productsListBox.Items.Refresh();
+                }  
+            }
+            else
+            {
+                MessageBox.Show("Сначала вам нужно выбрать деталь", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void editItemButton_Click(object sender, RoutedEventArgs e)
         {
+            if (productsListBox.SelectedItem != null)
+            {
+                SelectedIndex = productsListBox.SelectedIndex;
+                confirmItemButton.Visibility = Visibility.Visible;
+                editProductBorder.Visibility = Visibility.Visible;
+                IsEditMode = true;
+            } else
+            {
+                MessageBox.Show("Вам необходимо выбрать элемент перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
+        private void textChanged(object sender, TextChangedEventArgs e)
+        {
+            try
+            {
+
+                
+                string text = ((TextBox)sender).Text.Substring(0, ((TextBox)sender).Text.Length - 1);
+                if (text != avp.SelectedProduct.Type || text != avp.SelectedProduct.Title || text != avp.SelectedProduct.Price.ToString() || text != avp.SelectedProduct.CarBrand || text != avp.SelectedProduct.Date || text != avp.SelectedProduct.Quantity.ToString())
+                {
+                    MessageBox.Show("Изменяемое поле не совпадает с текущим выбранным элементом", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    if (!WasWarning)
+                        ((TextBox)sender).Text = text;
+                    else
+                        WasWarning = true;
+                }
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Сначала нужно выбрать элемент", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void confirmItemButton_Click(object sender, RoutedEventArgs e)
+        {
+            confirmItemButton.Visibility = Visibility.Hidden;
+            editProductBorder.Visibility = Visibility.Hidden;
+            IsEditMode = false;
         }
     }
 }

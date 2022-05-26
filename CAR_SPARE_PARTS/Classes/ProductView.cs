@@ -8,6 +8,7 @@ namespace CAR_SPARE_PARTS.Classes
 {
     public class ProductView
     {
+        public int ID { get; set; }
         public string Title { get; set; }
         public string CarBrand { get; set; }
 

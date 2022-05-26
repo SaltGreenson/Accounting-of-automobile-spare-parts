@@ -48,6 +48,7 @@ namespace CAR_SPARE_PARTS.Classes
                 {
                     ProductsList.Add(new ProductView
                     {
+                        ID = product.ID,
                         Title = product.Title,
                         CarBrand = GetCarBrand(product.CarBrandID),
                         Price = Math.Round(product.PricePerPiece, 2),
@@ -73,9 +74,14 @@ namespace CAR_SPARE_PARTS.Classes
                 PricePerPiece = 0,
                 Quantity = 0
             };
-
+            using (var dbContext = new ProductContext())
+            {
+                dbContext.Products.Add(pr);
+                dbContext.SaveChanges();
+            }
             ProductView prView = new ProductView
             {
+                ID = pr.ID,
                 Title = pr.Title,
                 CarBrand = GetCarBrand(pr.CarBrandID),
                 Price = Math.Round(pr.PricePerPiece, 2),
@@ -85,12 +91,17 @@ namespace CAR_SPARE_PARTS.Classes
             };
 
             ProductsList.Add(prView);
+            SelectedProduct = prView;
+        }
+
+        public void DeleteProduct(ProductView product)
+        {
             using (var dbContext = new ProductContext())
             {
-                dbContext.Products.Add(pr);
+                dbContext.Products.Remove(dbContext.Products.Where(p => p.ID == product.ID).First());
+                ProductsList.Remove(product);
                 dbContext.SaveChanges();
             }
-            SelectedProduct = prView;
         }
 
         public ProductView SelectedProduct
