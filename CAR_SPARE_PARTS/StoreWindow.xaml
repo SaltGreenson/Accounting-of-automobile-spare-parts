@@ -50,10 +50,9 @@
                             <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
                             <TextBox Name="dateTextBox" FontSize="11" Width="65" Height="25" MaxLength="10" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Center" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Date}" />
                             <TextBox Name="typeTextBox"  FontSize="11" Height="25" Width="145" MaxLength="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Center" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Type}" />
-                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="В наличии: "/>
-                            <TextBox Name="quantityTextBox" MaxLength="4" Width="35" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 50, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Quantity}" />
-                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 28, 0" VerticalAlignment="Center" Text="шт."/>
-                            <CheckBox Grid.Column="3" Grid.Row="1" Style="{DynamicResource CheckBoxStyle}" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15"/>
+                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Text="В наличии:" Margin="0, 0, 50, 0"/>
+                            <TextBox Name="quantityTextBox" MaxLength="4" Width="35" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Quantity}" />
+                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 5, 0" VerticalAlignment="Center" Text="шт."/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

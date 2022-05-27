@@ -11,8 +11,9 @@ namespace CAR_SPARE_PARTS.Models.Store
     public class CartProductList
     {
         [Key][DatabaseGenerated(DatabaseGeneratedOption.Identity)] public int ID { get; set; }
+        public int UserID { get; set; }
         public int ProductID { get; set; }
-        public int CartID { get; set; }
+        public int Quantity { get; set; }
 
     }
 }

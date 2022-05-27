@@ -35,13 +35,13 @@ namespace CAR_SPARE_PARTS
             using (var dbContext = new UserContext())
             {
                 currentUser = dbContext.Users.Where(user => user.Login == Login);
-                if (currentUser.Count() > 0)
+                if (currentUser != null)
                 {
                     User user = currentUser.First();
-                    return (user.Password == Password? $"Пользователь {user.Login} успешно вошел в программу" : $"Неверный пароль", user.Password == Password, user.IsAdministrator, user.CartID);
+                    return (user.Password == Password? $"Пользователь {user.Login} успешно вошел в программу" : $"Неверный пароль", user.Password == Password, user.IsAdministrator, user.ID);
                 }
             }
-            return ($"Неверный логин", false, false, currentUser.First().CartID);
+            return ($"Неверный логин", false, false, currentUser.First().ID);
         }
 
         public (string, bool) SignUp()

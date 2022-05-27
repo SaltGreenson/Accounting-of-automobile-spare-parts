@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CAR_SPARE_PARTS.Models.Store
 {
-    public class CartContext : DbContext
+    internal class CartProductListContext : DbContext
     {
-        public CartContext() : base("DefaultConnection")
+        public CartProductListContext() : base("DefaultConnection")
         {
 
         }
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartProductList> CartProductsList { get; set; }
     }
 }

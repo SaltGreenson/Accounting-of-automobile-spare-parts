@@ -30,9 +30,7 @@ namespace CAR_SPARE_PARTS.Pages
 
         private void Registration_click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-
+            
 
                 string login = loginTextBox.Text;
                 string password = passwordTextBox.Password;
@@ -70,10 +68,7 @@ namespace CAR_SPARE_PARTS.Pages
                     MessageBox.Show("Вам необходимо заполнить поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + "\n" + ex.Data, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            
 
         }
 

@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CAR_SPARE_PARTS.Models.Store;
+using CAR_SPARE_PARTS.Models.User;
+
 
 namespace CAR_SPARE_PARTS.Classes
 {
@@ -99,19 +101,45 @@ namespace CAR_SPARE_PARTS.Classes
 
         }
 
-        public void AddProductToCart(int quantity, int userCartId)
+        public void AddProductToCart(int quantity, int userId)
         {
-            using (var dbCartContext = new CartContext())
+
+            using (var dbCartProductListContext = new CartProductListContext())
             {
-                Cart cart = dbCartContext.Carts.Where(c => c.ID == userCartId).First();
-                using (var dbProductContext = new ProductContext())
+                var existingProduct = dbCartProductListContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID && p.UserID == userId);
+                if (existingProduct.Count() > 0)
                 {
-                    // нужно добавить таблицу в бд "CartProductList"
-                    // добавить создание листа при создании пользователя
-                    // тут нужно будет достать id листа продуктов и в нем искать продукты
-                    // если продукты будут то увеличивать счетчик, если нет то добавлять новый продукт в "CartProductList"
+                    existingProduct.First().Quantity += existingProduct.First().Quantity + quantity <= SelectedProduct.Quantity ? quantity : SelectedProduct.Quantity;
                 }
+                else
+                {
+                    dbCartProductListContext.CartProductsList.Add(new CartProductList
+                    {
+                        UserID = userId,
+                        ProductID = SelectedProduct.ID,
+                        Quantity = quantity
+                    });
+                }
+                dbCartProductListContext.SaveChanges();
             }
+            
+            using (var dbProductContext = new ProductContext())
+            {
+                Product pr = dbProductContext.Products.Where(p => p.ID == SelectedProduct.ID).First();
+                ProductView pl = ProductsList.Where(p => p.ID == SelectedProduct.ID).First();
+                if (pr.Quantity - quantity <= 0)
+                {
+                    dbProductContext.Products.Remove(pr);
+                    ProductsList.Remove(pl);
+                }
+                else
+                {
+                    pr.Quantity -= quantity;
+                    ProductsList.Where(p => p.ID == SelectedProduct.ID).First().Quantity -= quantity;
+                }
+                dbProductContext.SaveChanges();
+            }
+            OnPropertyChanged("ProductsList");
         }
 
         public void AddProduct()

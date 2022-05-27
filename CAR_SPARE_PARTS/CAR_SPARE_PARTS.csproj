@@ -70,9 +70,8 @@
     <Compile Include="Classes\RelayCommand.cs" />
     <Compile Include="Models\Store\CarBrand.cs" />
     <Compile Include="Models\Store\CarBrandContext.cs" />
-    <Compile Include="Models\Store\Cart.cs" />
-    <Compile Include="Models\Store\CartContext.cs" />
     <Compile Include="Models\Store\CartProductList.cs" />
+    <Compile Include="Models\Store\CartProductListContext.cs" />
     <Compile Include="Models\Store\Product.cs" />
     <Compile Include="Models\Store\ProductContext.cs" />
     <Compile Include="Pages\CartPage.xaml.cs">
