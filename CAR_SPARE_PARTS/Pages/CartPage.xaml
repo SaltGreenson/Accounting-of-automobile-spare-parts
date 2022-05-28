@@ -10,7 +10,52 @@
       Style="{DynamicResource PageStyle}"
       >
 
-    <Grid>
-        
+    <Grid x:Name="cartItemsGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="97"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="97"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="300*"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="cartListBox" Grid.Row="1" SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding CartProducts}" Style="{DynamicResource ListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="96,0,1,0" Grid.ColumnSpan="2" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="555" Height="90">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="138.75*"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="157.5"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Visibility="Hidden" Grid.Column="1" Grid.Row="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Path=ID}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
+                        <TextBox Name="titleTextBox" MaxLength="25" Width="250" Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Title}" />
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель:"/>
+                        <TextBox Name="carBrandTextBox" MaxLength="20" Width="100" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="57, 0, 0, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=CarBrand}" />
+                        <TextBox Name="priceTextBox" MaxLength="5" Width="50" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Price}" />
+                        <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
+                        <TextBox Name="dateTextBox" FontSize="11" Width="65" Height="25" MaxLength="10" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Center" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Date}" />
+                        <TextBox Name="typeTextBox"  FontSize="11" Height="25" Width="145" MaxLength="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Center" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Type}" />
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Text="В корзине:" Margin="0, 0, 50, 0"/>
+                        <TextBox Name="quantityTextBox" MaxLength="4" Width="35" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Quantity}" />
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 5, 0" VerticalAlignment="Center" Text="шт."/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid x:Name="removeFromCartGrid" Visibility="Visible" Grid.Column="1" Grid.Row="2">
+            <Button Style="{DynamicResource ButtonStyle}" Name="removeFromCartButton" Click="removeFromCartButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Удалить из корзины" Width="300" Height="80" FontSize="26"  />
+            <TextBox x:Name="removeFromCartQuantityTextBox" MaxLength="2" Width="50"  FontSize="26" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="False" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 90, 0" Style="{DynamicResource TextBoxStyleListBoxItem}"/>
+            <TextBlock Width="50" FontSize="26" TextAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 30, 0" HorizontalAlignment="Right" Text="ШТ."/>
+        </Grid>
     </Grid>
 </Page>

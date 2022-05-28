@@ -8,7 +8,7 @@
         Title="StoreWindow" Height="900" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         Style="{DynamicResource WindowStyle}">
     <Grid>
-        <Frame Visibility="Hidden" Width="800" Height="800" VerticalAlignment="Bottom" x:Name="_frame" Content="" NavigationUIVisibility="Hidden" Panel.ZIndex="1" Source="Pages/CartPage.xaml"/>
+        <Frame Visibility="Hidden" Width="800" Height="800" VerticalAlignment="Bottom" x:Name="_frame" Content="" NavigationUIVisibility="Hidden" Panel.ZIndex="1"/>
         <TextBlock Visibility="Hidden" x:Name="goBackTextBlock" TextDecorations="None" Margin="10, 10, 0, 0" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
             <Hyperlink Click="Hyperlink_Click" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128281;</Label></Hyperlink>
         </TextBlock>
@@ -27,6 +27,7 @@
                 <Hyperlink Click="GoToCart" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128722;</Label></Hyperlink>
             </TextBlock>
             <ListBox x:Name="productsListBox" Grid.Column="1" Grid.Row="1" SelectionChanged="productsListBox_SelectionChanged" SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding ProductsList}" Style="{DynamicResource ListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}" >
+                
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Width="555" Height="90">

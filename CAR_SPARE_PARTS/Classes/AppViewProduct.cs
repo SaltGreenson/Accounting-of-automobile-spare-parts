@@ -16,8 +16,10 @@ namespace CAR_SPARE_PARTS.Classes
     public class AppViewProduct
     {
         private ProductView selectedProduct;
-
+        private bool IsAdmin {get; set;}
         public List<ProductView> ProductsList { get; set; }
+        public List<ProductView> CartProducts { get; set; }
+        private int UserID { get; set; } 
 
         private event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string prop = "")
@@ -53,32 +55,71 @@ namespace CAR_SPARE_PARTS.Classes
         private string GetProductType(bool type) => type ? "Оригинальная запчасть" : "Неоригинальная запчасть";
         private bool GetProductType(string type) => type == "Оригинальная запчасть"? true : false;
 
+        private ProductView ConvertProductToProductView(Product product)
+        {
+            return new ProductView
+            {
+                ID = product.ID,
+                Title = product.Title,
+                CarBrand = GetCarBrand(product.CarBrandID),
+                Price = Math.Round(product.PricePerPiece, 2),
+                Date = product.DateOfManufacture,
+                Type = GetProductType(product.Type),
+                Quantity = product.Quantity
+            };
+        }
 
-
-        public AppViewProduct()
+        private Product GetProductById(int id)
         {
             using (var dbContext = new ProductContext())
             {
-                IQueryable<Product> products = dbContext.Products;
-                ProductsList = new List<ProductView>();
-
-                foreach (Product product in products)
-                {
-                    ProductsList.Add(new ProductView
-                    {
-                        ID = product.ID,
-                        Title = product.Title,
-                        CarBrand = GetCarBrand(product.CarBrandID),
-                        Price = Math.Round(product.PricePerPiece, 2),
-                        Date = product.DateOfManufacture,
-                        Type = GetProductType(product.Type),
-                        Quantity = product.Quantity
-                    });
-
-                }
-                OnPropertyChanged("ProductsObsCollection");
+                Product pr = dbContext.Products.SingleOrDefault(p => p.ID == id);
+                return pr != null ? pr : throw new Exception("Производство данного продукта закончилось. Приносим наши извенения!");
             }
-            
+        }
+
+        public AppViewProduct(int userId, bool isCartPage, bool isAdmin)
+        {
+            UserID = userId;
+            IsAdmin = isAdmin;
+            if (!isCartPage)
+            {
+                using (var dbContext = new ProductContext())
+                {
+                    IQueryable<Product> products = dbContext.Products;
+                    ProductsList = new List<ProductView>();
+                    foreach (Product product in products)
+                    {
+                        if (isAdmin)
+                        {
+                            ProductsList.Add(ConvertProductToProductView(product));
+                        }
+                        else if (product.Quantity >= 1)
+                        {
+                            ProductsList.Add(ConvertProductToProductView(product));
+                        }
+
+                    }
+                    OnPropertyChanged("ProductsList");
+                }
+            }
+            else
+            {
+                using (var dbCartProductsContext = new CartProductListContext())
+                {
+                    IQueryable<CartProductList> productsInCartIdies = dbCartProductsContext.CartProductsList.Where(p => p.UserID == UserID);
+                    CartProducts = new List<ProductView>();
+                    foreach (CartProductList cartProduct in productsInCartIdies)
+                    {
+                        Product product = GetProductById(cartProduct.ProductID);
+                        ProductView prView = ConvertProductToProductView(product);
+                        prView.Quantity = cartProduct.Quantity;
+                        CartProducts.Add(prView);
+                    }
+                }
+                OnPropertyChanged("CartProducts");
+            }
+
         }
 
         public void EditProduct()
@@ -101,12 +142,12 @@ namespace CAR_SPARE_PARTS.Classes
 
         }
 
-        public void AddProductToCart(int quantity, int userId)
+        public void AddProductToCart(int quantity)
         {
 
             using (var dbCartProductListContext = new CartProductListContext())
             {
-                var existingProduct = dbCartProductListContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID && p.UserID == userId);
+                var existingProduct = dbCartProductListContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID && p.UserID == UserID);
                 if (existingProduct.Count() > 0)
                 {
                     existingProduct.First().Quantity += existingProduct.First().Quantity + quantity <= SelectedProduct.Quantity ? quantity : SelectedProduct.Quantity;
@@ -115,7 +156,7 @@ namespace CAR_SPARE_PARTS.Classes
                 {
                     dbCartProductListContext.CartProductsList.Add(new CartProductList
                     {
-                        UserID = userId,
+                        UserID = UserID,
                         ProductID = SelectedProduct.ID,
                         Quantity = quantity
                     });
@@ -129,8 +170,11 @@ namespace CAR_SPARE_PARTS.Classes
                 ProductView pl = ProductsList.Where(p => p.ID == SelectedProduct.ID).First();
                 if (pr.Quantity - quantity <= 0)
                 {
-                    dbProductContext.Products.Remove(pr);
-                    ProductsList.Remove(pl);
+                    pr.Quantity = 0;
+                    if (!IsAdmin)
+                        ProductsList.Remove(pl);
+                    else
+                        ProductsList.Where(p => p.ID == SelectedProduct.ID).First().Quantity = 0;
                 }
                 else
                 {
@@ -140,6 +184,38 @@ namespace CAR_SPARE_PARTS.Classes
                 dbProductContext.SaveChanges();
             }
             OnPropertyChanged("ProductsList");
+        }
+
+        public void RemoveFromCart(int quantity)
+        {
+            using (var dbContext = new CartProductListContext())
+            {
+                using (var dbProductsContext = new ProductContext())
+                {
+                    Product pr = dbProductsContext.Products.Where(p => p.ID == SelectedProduct.ID).First();
+
+                    if (SelectedProduct.Quantity - quantity <= 0)
+                    {
+                        dbContext.CartProductsList.Remove(dbContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID).First());
+                        CartProducts.Remove(CartProducts.Where(p => p.ID == SelectedProduct.ID).First());
+                        pr.Quantity += SelectedProduct.Quantity;
+
+                    }
+                    else
+                    {
+                        dbContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID).First().Quantity -= quantity;
+                        CartProducts.SingleOrDefault(p => p.ID == SelectedProduct.ID).Quantity -= quantity;
+                        pr.Quantity += quantity;
+                    }
+                    dbProductsContext.SaveChanges();
+                }
+                dbContext.SaveChanges();
+            }
+            SelectedProduct = null;
+            OnPropertyChanged("CartProducts");
+            OnPropertyChanged("SelectedProduct");
+
+            
         }
 
         public void AddProduct()
@@ -177,8 +253,9 @@ namespace CAR_SPARE_PARTS.Classes
         {
             using (var dbContext = new ProductContext())
             {
-                dbContext.Products.Remove(dbContext.Products.Where(p => p.ID == product.ID).First());
-                ProductsList.Remove(product);
+                dbContext.Products.Where(p => p.ID == product.ID).First().Quantity = 0;
+                if(!IsAdmin)
+                    ProductsList.Remove(product);
                 dbContext.SaveChanges();
             }
         }

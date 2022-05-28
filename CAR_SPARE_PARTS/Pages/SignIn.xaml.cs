@@ -59,7 +59,7 @@ namespace CAR_SPARE_PARTS.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message + "\n" + ex.Data, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }

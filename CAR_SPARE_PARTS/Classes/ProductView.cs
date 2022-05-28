@@ -20,6 +20,6 @@ namespace CAR_SPARE_PARTS.Classes
         public int Quantity { get; set; }
         public double Price { get; set; }
 
-
+        public ProductView() { }
     }
 }

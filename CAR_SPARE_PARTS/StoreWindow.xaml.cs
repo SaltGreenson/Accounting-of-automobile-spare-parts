@@ -15,6 +15,7 @@ using CAR_SPARE_PARTS.Models.Store;
 using CAR_SPARE_PARTS.Classes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using CAR_SPARE_PARTS.Pages;
 
 namespace CAR_SPARE_PARTS
 {
@@ -54,7 +55,7 @@ namespace CAR_SPARE_PARTS
             {
                 SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             }
-            avp = new AppViewProduct();
+            avp = new AppViewProduct(userId, false, isAdmin);
             IsEditMode = false;
             DataContext = avp;
         }
@@ -167,6 +168,7 @@ namespace CAR_SPARE_PARTS
 
         private void GoToCart(object sender, RoutedEventArgs e)
         {
+            _frame.Content = new CartPage(UserID);
             searchItemsGrid.Visibility = Visibility.Hidden;
             _frame.Visibility = Visibility.Visible;
             goBackTextBlock.Visibility = Visibility.Visible;
@@ -177,7 +179,9 @@ namespace CAR_SPARE_PARTS
             _frame.Visibility = Visibility.Hidden;
             searchItemsGrid.Visibility = Visibility.Visible;
             goBackTextBlock.Visibility = Visibility.Hidden;
-
+            avp = new AppViewProduct(UserID, false, IsAdmin);
+            DataContext = avp;
+            productsListBox.Items.Refresh();
         }
 
         private void addProductToCart_Click(object sender, RoutedEventArgs e)
@@ -189,7 +193,7 @@ namespace CAR_SPARE_PARTS
             quantity = quantity >= 1 ? quantity : 1;
             quantity = quantity <= avp.SelectedProduct.Quantity ? quantity : avp.SelectedProduct.Quantity;
             addToCartQuantity.Text = quantity.ToString();
-            avp.AddProductToCart(quantity, UserID);
+            avp.AddProductToCart(quantity);
             productsListBox.Items.Refresh();
             MessageBox.Show($"В корзину было добавлено \"{title}\": {quantity}шт.\nЧтобы перейти в корзину нажмите на икноку \"Корзина\"", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             addToCartGrid.Visibility = Visibility.Hidden;
