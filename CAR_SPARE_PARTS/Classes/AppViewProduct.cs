@@ -78,6 +78,28 @@ namespace CAR_SPARE_PARTS.Classes
             }
         }
 
+        public List<ProductView> GetAllProducts()
+        {
+            List<ProductView> list = new List<ProductView>();
+            using (var dbContext = new ProductContext())
+            {
+                IQueryable<Product> products = dbContext.Products;
+                foreach (Product product in products)
+                {
+                    if (IsAdmin)
+                    {
+                        list.Add(ConvertProductToProductView(product));
+                    }
+                    else if (product.Quantity >= 1)
+                    {
+                        list.Add(ConvertProductToProductView(product));
+                    }
+
+                }
+            }
+            return list;
+        }
+
         public AppViewProduct(int userId, bool isCartPage, bool isAdmin)
         {
             UserID = userId;

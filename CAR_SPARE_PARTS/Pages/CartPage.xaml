@@ -57,5 +57,7 @@
             <TextBox x:Name="removeFromCartQuantityTextBox" MaxLength="2" Width="50"  FontSize="26" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="False" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 90, 0" Style="{DynamicResource TextBoxStyleListBoxItem}"/>
             <TextBlock Width="50" FontSize="26" TextAlignment="Center" VerticalAlignment="Center" Margin="0, 0, 30, 0" HorizontalAlignment="Right" Text="ШТ."/>
         </Grid>
+        <TextBlock x:Name="captionCart" Visibility="Hidden" Grid.Column="1" Grid.Row="1" Foreground="White" Text="На данный момент в корзине ничего нет" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
     </Grid>
 </Page>

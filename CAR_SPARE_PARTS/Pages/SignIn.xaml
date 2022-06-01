@@ -9,7 +9,7 @@
       Title="SignIn"
       Style="{DynamicResource PageStyle}">
     <Grid>
-        <Button Style="{DynamicResource ButtonStyle}" Click="Login_click" Content="Войти" HorizontalAlignment="Center" Margin="0,310,0,0" VerticalAlignment="Top" Height="61" Width="238" ClickMode="Release" FontSize="24">
+        <Button Style="{DynamicResource ButtonStyle}" x:Name="enterButton" Click="Login_click" Content="Войти" HorizontalAlignment="Center" Margin="0,310,0,0" VerticalAlignment="Top" Height="61" Width="238" ClickMode="Release" FontSize="24">
 
         </Button>
         <TextBlock HorizontalAlignment="Left" Margin="62,70,0,0" TextWrapping="Wrap" Text="Логин" VerticalAlignment="Top" Height="49" Width="123" FontFamily="Segoe UI Black" FontSize="36"/>

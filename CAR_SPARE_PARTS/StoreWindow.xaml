@@ -26,6 +26,38 @@
             <TextBlock x:Name="myCart" TextDecorations="None" Margin="0, 10, 10, 0" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
                 <Hyperlink Click="GoToCart" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128722;</Label></Hyperlink>
             </TextBlock>
+
+            <Grid x:Name="sortItemsGrid" Grid.Row="0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="155"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="searchTextBox" MaxLength="45" Foreground="Gray" Height="30" Grid.Row="1" LostFocus="searchTextBox_LostFocus" PreviewMouseLeftButtonDown="TextBox_PreviewMouseLeftButtonDown" Grid.Column="0" FontSize="20" VerticalAlignment="Center" Text="Подкрылок передний левый Audi 1-30 900BYN" Grid.ColumnSpan="2"/>
+                <Button Grid.Row="1" Grid.Column="2" Click="searchProductButton_Click"  Width="30" Height="30" HorizontalAlignment="Left" Content="&#128270;" FontSize="20" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Сортировка по:" FontSize="20" VerticalAlignment="Center"/>
+                <ComboBox x:Name="sortComboBox" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" FontSize="20">
+                    <ComboBoxItem Selected="ComboBoxItem1_Selected" Content="А-Я &#11014;"/>
+                    <ComboBoxItem Selected="ComboBoxItem2_Selected" Content="А-Я &#11015;"/>
+                    <ComboBoxItem Selected="ComboBoxItem3_Selected" Content="Модель А-Я &#11014;"/>
+                    <ComboBoxItem Selected="ComboBoxItem4_Selected" Content="Модель А-Я &#11015;"/>
+                    <ComboBoxItem Selected="ComboBoxItem5_Selected" Content="Дата производства &#11014;" />
+                    <ComboBoxItem Selected="ComboBoxItem6_Selected" Content="Дата производства &#11015;" />
+                    <ComboBoxItem Selected="ComboBoxItem7_Selected" Content="Цена &#11014;" />
+                    <ComboBoxItem Selected="ComboBoxItem8_Selected" Content="Цена &#11015;" />
+                    <ComboBoxItem Selected="ComboBoxItem9_Selected" Content="Количество &#11014;"/>
+                    <ComboBoxItem Selected="ComboBoxItem10_Selected" Content="Количество &#11015;"/>
+                    <ComboBoxItem Selected="ComboBoxItem11_Selected" Content="Тип (сначала оригинальные)"/>
+                    <ComboBoxItem Selected="ComboBoxItem12_Selected" Content="Тип (сначала неоригинальные)"/>
+                </ComboBox>
+            </Grid>
             <ListBox x:Name="productsListBox" Grid.Column="1" Grid.Row="1" SelectionChanged="productsListBox_SelectionChanged" SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding ProductsList}" Style="{DynamicResource ListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}" >
                 
                 <ListBox.ItemTemplate>
@@ -92,6 +124,7 @@
                     <TextBlock Grid.Column="2" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 28, 0" VerticalAlignment="Center" Text="шт."/>
                 </Grid>
             </Border>
+            <TextBlock x:Name="captionProductItems" Visibility="Hidden" Grid.Column="1" Grid.Row="1" Foreground="White" Text="По данным запросам нет продуктов" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>

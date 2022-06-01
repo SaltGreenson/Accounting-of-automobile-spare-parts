@@ -36,7 +36,15 @@ namespace CAR_SPARE_PARTS.Pages
                 UserID = userId;
                 avp = new AppViewProduct(userId, true, false);
                 DataContext = avp;
-            } catch (Exception ex)
+                if (avp.CartProducts.Count <= 0)
+                {
+                    captionCart.Visibility = Visibility.Visible;
+                } else
+                {
+                    captionCart.Visibility = Visibility.Hidden;
+                }
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show($"{ex.Message}", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -44,6 +52,8 @@ namespace CAR_SPARE_PARTS.Pages
 
         private void removeFromCartButton_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show(cartListBox.Items.Count.ToString());
+
             int quantity = -1;
             if (removeFromCartQuantityTextBox.Text.Length == 0)
             {
@@ -60,16 +70,23 @@ namespace CAR_SPARE_PARTS.Pages
                 removeFromCartQuantityTextBox.Text = quantity.ToString();
             }
 
-            
-                string title = avp.SelectedProduct.Title;
-                MessageBoxResult res = MessageBox.Show($"Вы действительно хотите удалить \"{title}\" {quantity}шт.?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (res == MessageBoxResult.Yes)
-                {
-                    avp.RemoveFromCart(quantity);
-                    cartListBox.Items.Refresh();
-                }
-            
 
+            string title = avp.SelectedProduct.Title;
+            MessageBoxResult res = MessageBox.Show($"Вы действительно хотите удалить \"{title}\" {quantity}шт.?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (res == MessageBoxResult.Yes)
+            {
+                avp.RemoveFromCart(quantity);
+                cartListBox.Items.Refresh();
+            }
+
+            if (avp.CartProducts.Count <= 0)
+            {
+                captionCart.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                captionCart.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

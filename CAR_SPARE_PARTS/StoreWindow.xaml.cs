@@ -16,6 +16,7 @@ using CAR_SPARE_PARTS.Classes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CAR_SPARE_PARTS.Pages;
+using System.Text.RegularExpressions;
 
 namespace CAR_SPARE_PARTS
 {
@@ -41,6 +42,8 @@ namespace CAR_SPARE_PARTS
         public StoreWindow(bool isAdmin, int userId)
         {
             InitializeComponent();
+
+            
             this.Closing += Window_Closing;
             IsAdmin = isAdmin;
             UserID = userId;
@@ -58,6 +61,15 @@ namespace CAR_SPARE_PARTS
             avp = new AppViewProduct(userId, false, isAdmin);
             IsEditMode = false;
             DataContext = avp;
+            sortComboBox.SelectedIndex = 0;
+            if (avp.ProductsList.Count <= 0)
+            {
+                captionProductItems.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                captionProductItems.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Window_Closing(object sender, EventArgs e)
@@ -112,6 +124,14 @@ namespace CAR_SPARE_PARTS
             else
             {
                 MessageBox.Show("Сначала вам нужно выбрать деталь", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if (avp.ProductsList.Count <= 0)
+            {
+                captionProductItems.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                captionProductItems.Visibility = Visibility.Hidden;
             }
         }
 
@@ -184,10 +204,58 @@ namespace CAR_SPARE_PARTS
             productsListBox.Items.Refresh();
         }
 
+        private (string, string, int, string) ParcingText(string text)
+        {
+            Regex titleReg = new Regex(@"[а-я]+");
+            Regex quantityReg = new Regex(@"[\d]+\-[\d]+");
+            Regex priceReg = new Regex(@"[\d]+byn");
+            Regex carBrandReg = new Regex(@"[a-z]+");
+            string productSearchingTitle = "";
+            string productSearchingQuantity = "";
+            string productSearchingPrice = "";
+            string productSearchingCarBrand = "";
+            int price = 0;
+            foreach (Match match in titleReg.Matches(text.ToLower()))
+            {
+                productSearchingTitle += match + " ";
+            }
+            foreach (Match match in quantityReg.Matches(text.ToLower()))
+            {
+                productSearchingQuantity += match + " ";
+            }
+            foreach (Match match in priceReg.Matches(text.ToLower()))
+            {
+                productSearchingPrice += match + " ";
+            }
+
+            foreach (Match match in carBrandReg.Matches(text.ToLower()))
+            {
+                if (match.ToString().Length >= 4 && match.ToString() != "euro")
+                    productSearchingCarBrand += match + " ";
+            }
+
+            if (productSearchingPrice.Length != 0)
+            {
+                price = Convert.ToInt32(productSearchingPrice.Substring(0, productSearchingPrice.Length - 4));
+            }
+
+            return (productSearchingTitle, productSearchingQuantity, price, productSearchingCarBrand);
+        }
+
+        private void CollectProductsByFilters(string title, int minQuantity, int maxQuantity, int price, string carBrand, string fullQuery)
+        {
+            List<ProductView> products = new List<ProductView>(avp.GetAllProducts());
+            
+        }
+
+        private void searchProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            (string, string, int, string) summaryQuery = ParcingText(searchTextBox.Text);
+            MessageBox.Show($"Title: {summaryQuery.Item1}\nQuantity: {summaryQuery.Item2}\nPrice: {summaryQuery.Item3.ToString()}\nCarBrand: {summaryQuery.Item4}");
+
+        }
         private void addProductToCart_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
             int quantity = Convert.ToInt32(addToCartQuantity.Text);
             string title = avp.SelectedProduct.Title;
             quantity = quantity >= 1 ? quantity : 1;
@@ -199,5 +267,101 @@ namespace CAR_SPARE_PARTS
             addToCartGrid.Visibility = Visibility.Hidden;
             addToCartQuantity.Text = "";
         }
+
+        private void TextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            searchTextBox.Clear();
+            searchTextBox.Foreground = Brushes.Black;
+        }
+
+        private void searchTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (searchTextBox.Text.Length < 1)
+            {
+                searchTextBox.Text = "Подкрылок передний левый 1-30 900BYN";
+            }
+            searchTextBox.Foreground = Brushes.Gray;
+        }
+
+        private void UpdateListBox(List<ProductView> orderedList)
+        {
+            avp.ProductsList.Clear();
+            foreach (ProductView product in orderedList)
+            {
+                avp.ProductsList.Add(product);
+            }
+            productsListBox.Items.Refresh();
+        }
+
+        private void ComboBoxItem1_Selected(object sender, RoutedEventArgs e)
+        {
+
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.Title));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem2_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.Title));
+            UpdateListBox(orderedList);
+
+        }
+        private void ComboBoxItem3_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.CarBrand));
+            UpdateListBox(orderedList);
+
+
+        }
+        private void ComboBoxItem4_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.CarBrand));
+            UpdateListBox(orderedList);
+
+
+        }
+        private void ComboBoxItem5_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.Date));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem6_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.Date));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem7_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.Price));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem8_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.Price));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem9_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.Quantity));
+            UpdateListBox(orderedList);
+        }
+        private void ComboBoxItem10_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.Quantity));
+            UpdateListBox(orderedList);
+
+        }
+        private void ComboBoxItem11_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.Type));
+            UpdateListBox(orderedList);
+
+        }
+        private void ComboBoxItem12_Selected(object sender, RoutedEventArgs e)
+        {
+            List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderBy(p => p.Type));
+            UpdateListBox(orderedList);
+        }
+
     }
 }
+

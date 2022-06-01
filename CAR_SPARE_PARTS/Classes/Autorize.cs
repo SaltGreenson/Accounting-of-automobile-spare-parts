@@ -31,25 +31,24 @@ namespace CAR_SPARE_PARTS
 
         public (string,bool, bool, int) SignIn()
         {
-            IQueryable<User> currentUser;
+            User currentUser;
             using (var dbContext = new UserContext())
             {
-                currentUser = dbContext.Users.Where(user => user.Login == Login);
+                currentUser = dbContext.Users.SingleOrDefault(user => user.Login == Login);
                 if (currentUser != null)
                 {
-                    User user = currentUser.First();
-                    return (user.Password == Password? $"Пользователь {user.Login} успешно вошел в программу" : $"Неверный пароль", user.Password == Password, user.IsAdministrator, user.ID);
+                    return (currentUser.Password == Password? $"Пользователь {currentUser.Login} успешно вошел в программу" : $"Неверный пароль", currentUser.Password == Password, currentUser.IsAdministrator, currentUser.ID);
                 }
             }
-            return ($"Неверный логин", false, false, currentUser.First().ID);
+            return ($"Неверный логин", false, false, 0);
         }
 
         public (string, bool) SignUp()
         {
             using (var dbContext = new UserContext())
             {
-                bool isUser = dbContext.Users.Where(user => user.Login == Login).Count() > 0;
-                if (!isUser)
+                User existUser = dbContext.Users.SingleOrDefault(user => user.Login == Login);
+                if (existUser == null)
                 {
                     if (Password == RepeatPassword)
                     {
