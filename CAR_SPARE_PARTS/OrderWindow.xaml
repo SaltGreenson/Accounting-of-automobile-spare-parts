@@ -21,9 +21,6 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" Text="Фамилия:" Margin="0, 0, 10, 0"/>
         <TextBox x:Name="lastNameTextBox" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" FontSize="24" Grid.ColumnSpan="2" HorizontalAlignment="Left" MaxLength="25" Width="400" Style="{DynamicResource TextBoxStyle}"/>
@@ -34,10 +31,10 @@
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" Text="Адрес:"  Margin="0, 0, 10, 0"/>
         <TextBox x:Name="addressTextBox" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="24" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="400" MaxLength="25" Style="{DynamicResource TextBoxStyle}"/>
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" Text="Дата:"  Margin="0, 0, 10, 0"/>
-        <Calendar x:Name="calendar" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.RowSpan="3"/>
-        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" Text="Итоговая стоимость:"  Margin="0, 0, 10, 0"/>
-        <TextBox x:Name="totalPriceTextBox" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" FontSize="24" IsReadOnly="True"  MaxLength="25" Style="{DynamicResource TextBoxStyle}"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="24" Text="Итоговая стоимость:"  Margin="0, 0, 10, 0"/>
+        <TextBox x:Name="totalPriceTextBox" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" FontSize="24" IsReadOnly="True"  MaxLength="25" Style="{DynamicResource TextBoxStyle}"/>
 
-        <Button Grid.Row="8" Grid.Column="1" Margin="10" Content="Заказать" FontSize="24" Click="Button_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button Grid.Row="6" Grid.Column="1" Margin="10" Content="Заказать" FontSize="24" Click="Button_Click" Style="{DynamicResource ButtonStyle}"/>
+        <DatePicker x:Name="calendar" Grid.Column="1" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="24" Style="{DynamicResource DatePickerStyle}"/>
     </Grid>
 </Window>

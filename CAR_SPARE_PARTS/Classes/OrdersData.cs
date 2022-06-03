@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CAR_SPARE_PARTS.Models.Order;
+using CAR_SPARE_PARTS.Models.Store;
 
 namespace CAR_SPARE_PARTS.Classes
 {
@@ -35,6 +36,11 @@ namespace CAR_SPARE_PARTS.Classes
                 {
                     dbContext.Orders.Add(order);
                 }
+                dbContext.SaveChanges();
+            }
+            using (var dbContext = new CartProductListContext())
+            {
+                dbContext.CartProductsList.RemoveRange(dbContext.CartProductsList);
                 dbContext.SaveChanges();
             }
         }
