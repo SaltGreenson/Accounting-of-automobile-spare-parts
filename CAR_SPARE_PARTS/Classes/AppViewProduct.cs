@@ -100,6 +100,18 @@ namespace CAR_SPARE_PARTS.Classes
             return list;
         }
 
+        public bool IsCartEmpty()
+        {
+            using (var dbContext = new CartProductListContext())
+            {
+                return dbContext.CartProductsList.Where(p => p.UserID == UserID).Count() > 0;
+            }
+        }
+        public AppViewProduct(int userId)
+        {
+            UserID = userId;
+        }
+
         public AppViewProduct(int userId, bool isCartPage, bool isAdmin)
         {
             UserID = userId;
@@ -141,7 +153,22 @@ namespace CAR_SPARE_PARTS.Classes
                 }
                 OnPropertyChanged("CartProducts");
             }
+        }
 
+        public double GetOrderSum()
+        {
+            double sum = 0;
+            using (var dbCartProductsContext = new CartProductListContext())
+            {
+                IQueryable<CartProductList> productsInCartIdies = dbCartProductsContext.CartProductsList.Where(p => p.UserID == UserID);
+                foreach (CartProductList cartProduct in productsInCartIdies)
+                {
+                    double price = GetProductById(cartProduct.ProductID).PricePerPiece;
+                    int quantity = cartProduct.Quantity;
+                    sum += price * quantity;
+                }
+            }
+            return sum;
         }
 
         public void EditProduct()

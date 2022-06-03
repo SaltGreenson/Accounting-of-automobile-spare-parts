@@ -52,8 +52,6 @@ namespace CAR_SPARE_PARTS.Pages
 
         private void removeFromCartButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(cartListBox.Items.Count.ToString());
-
             int quantity = -1;
             if (removeFromCartQuantityTextBox.Text.Length == 0)
             {

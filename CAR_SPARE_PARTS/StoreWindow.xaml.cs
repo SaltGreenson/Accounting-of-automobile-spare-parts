@@ -78,7 +78,7 @@ namespace CAR_SPARE_PARTS
             {
                 Close();
             }
-            catch (Exception ex) { }
+            catch { }
             MainWindow mw = new MainWindow();
             SwitchTheme(new Uri("./Styles/StylesForUser.xaml", UriKind.Relative));
             mw.Show();
@@ -170,7 +170,7 @@ namespace CAR_SPARE_PARTS
                 DateTime date = Convert.ToDateTime(avp.SelectedProduct.Date);
                 avp.SelectedProduct.Date = $"{date.Year}-{date.Month}-{date.Day}";
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("Поле \"Дата\" не может иметь данный формат", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 fl = true;
@@ -192,6 +192,19 @@ namespace CAR_SPARE_PARTS
             searchItemsGrid.Visibility = Visibility.Hidden;
             _frame.Visibility = Visibility.Visible;
             goBackTextBlock.Visibility = Visibility.Visible;
+        }
+
+        private void DoOrder(object sender, RoutedEventArgs e)
+        {
+            if (avp.IsCartEmpty())
+            {
+                OrderWindow ow = new OrderWindow(UserID);
+                ow.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Ваша корзина пуста. Добавьте что-нибудь в корзину, чтобы сделать заказ.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
@@ -239,20 +252,148 @@ namespace CAR_SPARE_PARTS
                 price = Convert.ToInt32(productSearchingPrice.Substring(0, productSearchingPrice.Length - 4));
             }
 
-            return (productSearchingTitle, productSearchingQuantity, price, productSearchingCarBrand);
+            return (productSearchingTitle.Trim(), productSearchingQuantity.Trim(), price, productSearchingCarBrand.Trim());
         }
 
-        private void CollectProductsByFilters(string title, int minQuantity, int maxQuantity, int price, string carBrand, string fullQuery)
+        private List<ProductView> CollectProductsByFilters(string title, int minQuantity, int maxQuantity, int price, string carBrand, string fullQuery)
         {
             List<ProductView> products = new List<ProductView>(avp.GetAllProducts());
-            
+            List<ProductView> newProducts = new List<ProductView>();
+            List<ProductView> templateList = new List<ProductView>();
+            if (title.Length > 0)
+            {
+                foreach(ProductView p in products.Where(p => p.Title.ToLower().IndexOf(title.ToLower()) != -1))
+                {
+                    newProducts.Add(p);   
+                }
+            }
+            if (minQuantity > 0 && maxQuantity > 0)
+            {
+                
+                if (newProducts.Count > 0)
+                {
+                    templateList.Clear();
+                    templateList = new List<ProductView>(newProducts);
+                    newProducts.Clear();
+                    foreach (ProductView p in templateList.Where(p => p.Quantity >= minQuantity && p.Quantity <= maxQuantity))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+                else
+                {
+                    foreach (ProductView p in products.Where(p => p.Quantity >= minQuantity && p.Quantity <= maxQuantity))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+            }
+            if (price > 0)
+            {
+                if (newProducts.Count > 0)
+                {
+                    templateList.Clear();
+                    templateList = new List<ProductView>(newProducts);
+                    newProducts.Clear();
+                    foreach (ProductView p in templateList.Where(p => p.Price <= price))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+                else
+                {
+                    foreach (ProductView p in products.Where(p => p.Price <= price))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+            }
+
+            if (carBrand.Length > 0)
+            {
+                if (newProducts.Count > 0)
+                {
+                    templateList.Clear();
+                    templateList = new List<ProductView>(newProducts);
+                    newProducts.Clear();
+                    foreach (ProductView p in templateList.Where(p => p.CarBrand.ToLower().IndexOf(carBrand.ToLower()) != -1))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+                else
+                {
+
+                    foreach (ProductView p in products.Where(p => p.CarBrand.ToLower().IndexOf(carBrand.ToLower()) != -1))
+                    {
+                        newProducts.Add(p);
+                    }
+                }
+            }
+            //if (fullQuery.Length > 0)
+            //{
+            //    if (newProducts.Count > 0)
+            //    {
+            //        templateList.Clear();
+            //        templateList = new List<ProductView>(newProducts);
+            //        if (templateList.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1).Count() > 0)
+            //        {
+            //            newProducts.Clear();
+
+            //            foreach (ProductView p in templateList.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1))
+            //            {
+            //                newProducts.Add(p);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (ProductView p in products.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1))
+            //        {
+            //            newProducts.Add(p);
+            //        }
+            //    }
+            //}
+
+            return newProducts;
         }
 
         private void searchProductButton_Click(object sender, RoutedEventArgs e)
         {
-            (string, string, int, string) summaryQuery = ParcingText(searchTextBox.Text);
-            MessageBox.Show($"Title: {summaryQuery.Item1}\nQuantity: {summaryQuery.Item2}\nPrice: {summaryQuery.Item3.ToString()}\nCarBrand: {summaryQuery.Item4}");
-
+            if (searchTextBox.Text == "Поиск")
+            {
+                avp.ProductsList.Clear();
+                foreach (ProductView p in avp.GetAllProducts())
+                {
+                    avp.ProductsList.Add(p);
+                }
+                sortComboBox.SelectedIndex = 0;
+            }
+            else
+            {
+                (string, string, int, string) summaryQuery = ParcingText(searchTextBox.Text);
+                string title = summaryQuery.Item1;
+                string quantityInterval = summaryQuery.Item2;
+                int minQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
+                int maxQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
+                int price = summaryQuery.Item3;
+                string carBrand = summaryQuery.Item4;
+                avp.ProductsList.Clear();
+                foreach (ProductView pr in CollectProductsByFilters(title, minQuantity, maxQuantity, price, carBrand, searchTextBox.Text))
+                {
+                    avp.ProductsList.Add(pr);
+                }
+                
+            }
+            if (avp.ProductsList.Count <= 0)
+            {
+                captionProductItems.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                captionProductItems.Visibility = Visibility.Hidden;
+            }
+            productsListBox.Items.Refresh();
         }
         private void addProductToCart_Click(object sender, RoutedEventArgs e)
         {
@@ -278,7 +419,7 @@ namespace CAR_SPARE_PARTS
         {
             if (searchTextBox.Text.Length < 1)
             {
-                searchTextBox.Text = "Подкрылок передний левый 1-30 900BYN";
+                searchTextBox.Text = "Поиск";
             }
             searchTextBox.Foreground = Brushes.Gray;
         }

@@ -66,14 +66,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\AppViewProduct.cs" />
+    <Compile Include="Classes\OrdersData.cs" />
     <Compile Include="Classes\ProductView.cs" />
     <Compile Include="Classes\RelayCommand.cs" />
+    <Compile Include="Models\Order\Order.cs" />
+    <Compile Include="Models\Order\OrderContext.cs" />
     <Compile Include="Models\Store\CarBrand.cs" />
     <Compile Include="Models\Store\CarBrandContext.cs" />
     <Compile Include="Models\Store\CartProductList.cs" />
     <Compile Include="Models\Store\CartProductListContext.cs" />
     <Compile Include="Models\Store\Product.cs" />
     <Compile Include="Models\Store\ProductContext.cs" />
+    <Compile Include="OrderWindow.xaml.cs">
+      <DependentUpon>OrderWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\CartPage.xaml.cs">
       <DependentUpon>CartPage.xaml</DependentUpon>
     </Compile>
@@ -100,6 +106,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\CartPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
