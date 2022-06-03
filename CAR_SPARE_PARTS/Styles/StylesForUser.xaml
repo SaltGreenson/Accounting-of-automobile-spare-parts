@@ -40,6 +40,13 @@
         
     </Style>
 
+    <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+        <Setter Property="FontFamily" Value="Segoe UI Black"/>
+        <Setter Property="Background" Value="#161D28"/>
+        <Setter Property="Foreground" Value="#B92970"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="Segoe UI Black"/>
         <Setter Property="Background" Value="#161D28"/>
