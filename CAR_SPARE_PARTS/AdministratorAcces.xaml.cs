@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace CAR_SPARE_PARTS
 {
-    /// <summary>
-    /// Interaction logic for AdministratorAcces.xaml
-    /// </summary>
     public partial class AdministratorAcces : Window
     {
         bool IsAdmin { get; set; }

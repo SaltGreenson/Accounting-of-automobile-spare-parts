@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
-        Title="StoreWindow" Height="900" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        Title="Магазин" Height="900" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         Style="{DynamicResource WindowStyle}">
     <Grid>
         <Frame Visibility="Hidden" Width="800" Height="800" VerticalAlignment="Bottom" x:Name="_frame" Content="" NavigationUIVisibility="Hidden" Panel.ZIndex="1"/>
@@ -31,6 +31,9 @@
             </TextBlock>
             <TextBlock x:Name="exportTextBlock" Visibility="Hidden" TextDecorations="None" Margin="0, 10, 90, 0" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
                 <Hyperlink Click="ExportDataOfOrders" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128229;</Label></Hyperlink>
+            </TextBlock>
+            <TextBlock x:Name="referenceTextBlock" TextDecorations="None" Margin="10, 10, 0, 0" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
+                <Hyperlink Click="DisplayReference" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#10068;</Label></Hyperlink>
             </TextBlock>
             <Grid x:Name="sortItemsGrid" Grid.Row="0" Grid.Column="1">
                 <Grid.ColumnDefinitions>
@@ -80,16 +83,15 @@
                                 <RowDefinition Height="30"/>
                             </Grid.RowDefinitions>
                             <TextBlock Visibility="Hidden" Grid.Column="1" Grid.Row="1" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Path=ID}"/>
-                            <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Path=Title}"/>
-                            <TextBox Name="titleTextBox" MaxLength="25" Width="250" Grid.Column="0" Grid.Row="1" FontSize="18" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Title}" />
-                            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Left" VerticalAlignment="Center" Text="Модель:"/>
-                            <TextBox Name="carBrandTextBox" MaxLength="20" Width="100" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="57, 0, 0, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=CarBrand}" />
-                            <TextBox Name="priceTextBox" MaxLength="5" Width="50" Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Price}" />
-                            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
-                            <TextBox Name="dateTextBox" FontSize="11" Width="65" Height="25" MaxLength="10" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Center" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Date}" />
-                            <TextBox Name="typeTextBox"  FontSize="11" Height="25" Width="145" MaxLength="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Center" VerticalAlignment="Bottom" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Type}" />
-                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalAlignment="Center" Text="В наличии:" Margin="0, 0, 50, 0"/>
-                            <TextBox Name="quantityTextBox" MaxLength="4" Width="35" Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Style="{DynamicResource TextBoxStyleListBoxItem}" Text="{Binding Path=Quantity}" />
+                            <TextBlock Name="titleTextBox" Width="350" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" FontSize="22" TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Path=Title}" />
+                            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="16" TextAlignment="Left" VerticalAlignment="Center" Text="Модель:"/>
+                            <TextBlock Name="carBrandTextBox" Width="100" Grid.Column="0" Grid.Row="0" FontSize="16" TextAlignment="Left" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65, 0, 0, 0" Text="{Binding Path=CarBrand}" />
+                            <TextBlock Name="priceTextBox" Width="50" Grid.Column="0" Grid.Row="0" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Text="{Binding Path=Price}" />
+                            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="16" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
+                            <TextBlock Name="dateTextBox" FontSize="13" Width="65" Height="25" Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Left" Text="{Binding Path=Date}" />
+                            <TextBlock Name="typeTextBox"  FontSize="13" Height="25" Width="155" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Path=Type}" />
+                            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" Text="В наличии:" Margin="0, 0, 70, 0"/>
+                            <TextBlock Name="quantityTextBox" Width="35" Grid.Column="3" Grid.Row="1" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Text="{Binding Path=Quantity}" />
                             <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 5, 0" VerticalAlignment="Center" Text="шт."/>
                         </Grid>
                     </DataTemplate>

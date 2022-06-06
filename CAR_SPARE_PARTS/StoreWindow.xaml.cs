@@ -142,7 +142,7 @@ namespace CAR_SPARE_PARTS
             try
             {
                 avp.SelectedProduct.Quantity = Convert.ToInt32(quantityEditTextBox.Text);
-                avp.SelectedProduct.Price = Convert.ToInt32(quantityEditTextBox.Text);
+                avp.SelectedProduct.Price = Convert.ToInt32(priceEditTextBox.Text);
                 if (productsListBox.SelectedItem != null)
                 {
                     addToCartGrid.Visibility = Visibility.Hidden;
@@ -164,6 +164,17 @@ namespace CAR_SPARE_PARTS
 
         private void confirmItemButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                Convert.ToInt32(priceEditTextBox.Text);
+                Convert.ToInt32(quantityEditTextBox.Text);
+
+            }
+            catch
+            {
+                MessageBox.Show("Введите корректные данные", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             bool fl = false;
             if (avp.SelectedProduct.Quantity <= 0)
             {
@@ -202,6 +213,34 @@ namespace CAR_SPARE_PARTS
             searchItemsGrid.Visibility = Visibility.Hidden;
             _frame.Visibility = Visibility.Visible;
             goBackTextBlock.Visibility = Visibility.Visible;
+        }
+
+        private void DisplayReference(object sender, RoutedEventArgs e)
+        {
+            string text = "\tИнструкция использования программы\n" +
+                "На рабочем экране вы можете наблюдать:\n" +
+                "  1. Корзина - предназначена для просмотра и редактирования товаров, ранее добавленных в корзину.\n" +
+                "  2. Экспорт данных - выполняет экспорт ранее осуществяемых заказов в MS Word. Эта функция работает только в том случае, если вы являетесь администратором.\n" +
+                "  3. Знак \"$\" - означает выполнить заказ. Перейдя на страницу заказа вам необзодимо будет заполнить свои личные данные и время доставки товаров, ранее добавленных в корзину.\n" +
+                "  4. Панель поиска - это панель, предназначенная для поиска товаров по заданным вами фильтрам. Поиск может осуществляться по следующим полям:\n" +
+                "\tА) По названию.\n" +
+                "\tБ) По цене, в конце должно быть указано BYN\n" +
+                "\tВ) По марке автомобиля.\n" +
+                "\tГ) По количеству, указывается ОТ и ДО.\n" +
+                "   А также вы можете комбинировать вышеперечислнные фильтры и выполнять более точный поиск товара. Пример запроса поиска: Подкрылок передний левый Audi 1-30 900BYN. Если по данному запросу не будет найдено товара, то система поиска постарается найти похожие товары по заданному фильтру.\n" +
+                "  5. Сортировка товаров - здесь вы можете выбрать подходящую для вас сортировку автомобильных запчастей.\n" +
+                "  6. Кнопка \"Удалить\" - удаляет выбранный вами товар." +
+                "  7. Кнопка \"Добавить\" - добавляет новую деталь в список товаров. Эта функция работает только в том случае, если вы являетесь администратором.\n" +
+                "  8. Кнопка \"Редактировать\" - позволяет редактировать выбранный вами товар. Эта функция работает только в том случае, если вы являетесь администратором.\n" +
+                "  9. Кнопка \"Сохранить\" - сохраняет внесенные изменения после редактирования\n" +
+                "  10. Список автомобильных запчастей - отображает весь список запчастей которые были добавлены администраторами\n" +
+                "\n" +
+                "\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "%%%%%%%ПАРОЛЬ АДМИНИСТРАТОРА: 233444%%%%%%%" +
+                "\t%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n" +
+                "\n" +
+                "\t\t\t\t  ©Юськович Влад";
+            MessageBox.Show(text, "Справка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ExportDataOfOrders(object sender, RoutedEventArgs e)
@@ -357,31 +396,6 @@ namespace CAR_SPARE_PARTS
                     }
                 }
             }
-            //if (fullQuery.Length > 0)
-            //{
-            //    if (newProducts.Count > 0)
-            //    {
-            //        templateList.Clear();
-            //        templateList = new List<ProductView>(newProducts);
-            //        if (templateList.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1).Count() > 0)
-            //        {
-            //            newProducts.Clear();
-
-            //            foreach (ProductView p in templateList.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1))
-            //            {
-            //                newProducts.Add(p);
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        foreach (ProductView p in products.Where(p => p.Title.ToLower().IndexOf(fullQuery) != -1))
-            //        {
-            //            newProducts.Add(p);
-            //        }
-            //    }
-            //}
-
             return newProducts;
         }
 
@@ -424,7 +438,15 @@ namespace CAR_SPARE_PARTS
         }
         private void addProductToCart_Click(object sender, RoutedEventArgs e)
         {
-            int quantity = Convert.ToInt32(addToCartQuantity.Text);
+            int quantity;
+            try
+            {
+                quantity = Convert.ToInt32(addToCartQuantity.Text);
+            }
+            catch
+            {
+                quantity = 1;
+            }
             string title = avp.SelectedProduct.Title;
             quantity = quantity >= 1 ? quantity : 1;
             quantity = quantity <= avp.SelectedProduct.Quantity ? quantity : avp.SelectedProduct.Quantity;
@@ -484,8 +506,6 @@ namespace CAR_SPARE_PARTS
         {
             List<ProductView> orderedList = new List<ProductView>(avp.ProductsList.OrderByDescending(p => p.CarBrand));
             UpdateListBox(orderedList);
-
-
         }
         private void ComboBoxItem5_Selected(object sender, RoutedEventArgs e)
         {

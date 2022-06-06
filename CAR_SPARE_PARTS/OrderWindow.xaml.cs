@@ -16,9 +16,6 @@ using CAR_SPARE_PARTS.Models.Order;
 
 namespace CAR_SPARE_PARTS
 {
-    /// <summary>
-    /// Interaction logic for OrderWindow.xaml
-    /// </summary>
     public partial class OrderWindow : Window
     {
         int UserID { get; set; }
