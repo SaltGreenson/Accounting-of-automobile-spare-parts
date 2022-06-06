@@ -26,8 +26,11 @@
             <TextBlock x:Name="myCart" TextDecorations="None" Margin="0, 10, 10, 0" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
                 <Hyperlink Click="GoToCart" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128722;</Label></Hyperlink>
             </TextBlock>
-            <TextBlock TextDecorations="None" Margin="0, 10, 70, 0" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
+            <TextBlock TextDecorations="None" Margin="0, 10, 50, 0" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
                 <Hyperlink Click="DoOrder" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128178;</Label></Hyperlink>
+            </TextBlock>
+            <TextBlock x:Name="exportTextBlock" Visibility="Hidden" TextDecorations="None" Margin="0, 10, 90, 0" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">
+                <Hyperlink Click="ExportDataOfOrders" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">&#128229;</Label></Hyperlink>
             </TextBlock>
             <Grid x:Name="sortItemsGrid" Grid.Row="0" Grid.Column="1">
                 <Grid.ColumnDefinitions>

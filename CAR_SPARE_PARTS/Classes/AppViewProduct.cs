@@ -196,10 +196,10 @@ namespace CAR_SPARE_PARTS.Classes
 
             using (var dbCartProductListContext = new CartProductListContext())
             {
-                var existingProduct = dbCartProductListContext.CartProductsList.Where(p => p.ProductID == SelectedProduct.ID && p.UserID == UserID);
-                if (existingProduct.Count() > 0)
+                var existingProduct = dbCartProductListContext.CartProductsList.SingleOrDefault(p => p.ProductID == SelectedProduct.ID && p.UserID == UserID);
+                if (existingProduct != null)
                 {
-                    existingProduct.First().Quantity += existingProduct.First().Quantity + quantity <= SelectedProduct.Quantity ? quantity : SelectedProduct.Quantity;
+                    existingProduct.Quantity += existingProduct.Quantity + quantity <= SelectedProduct.Quantity ? quantity : SelectedProduct.Quantity;
                 }
                 else
                 {
@@ -215,20 +215,20 @@ namespace CAR_SPARE_PARTS.Classes
             
             using (var dbProductContext = new ProductContext())
             {
-                Product pr = dbProductContext.Products.Where(p => p.ID == SelectedProduct.ID).First();
-                ProductView pl = ProductsList.Where(p => p.ID == SelectedProduct.ID).First();
+                Product pr = dbProductContext.Products.SingleOrDefault(p => p.ID == SelectedProduct.ID);
+                ProductView pl = ProductsList.SingleOrDefault(p => p.ID == SelectedProduct.ID);
                 if (pr.Quantity - quantity <= 0)
                 {
                     pr.Quantity = 0;
                     if (!IsAdmin)
                         ProductsList.Remove(pl);
                     else
-                        ProductsList.Where(p => p.ID == SelectedProduct.ID).First().Quantity = 0;
+                        ProductsList.SingleOrDefault(p => p.ID == SelectedProduct.ID).Quantity = 0;
                 }
                 else
                 {
                     pr.Quantity -= quantity;
-                    ProductsList.Where(p => p.ID == SelectedProduct.ID).First().Quantity -= quantity;
+                    ProductsList.SingleOrDefault(p => p.ID == SelectedProduct.ID).Quantity -= quantity;
                 }
                 dbProductContext.SaveChanges();
             }
@@ -274,7 +274,7 @@ namespace CAR_SPARE_PARTS.Classes
                 Title = "Новая деталь",
                 Type = false,
                 CarBrandID = 0,
-                DateOfManufacture = "1970-01-01",
+                DateOfManufacture = $"{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}",
                 PricePerPiece = 0,
                 Quantity = 0
             };
@@ -303,8 +303,10 @@ namespace CAR_SPARE_PARTS.Classes
             using (var dbContext = new ProductContext())
             {
                 dbContext.Products.Where(p => p.ID == product.ID).First().Quantity = 0;
-                if(!IsAdmin)
+                if (!IsAdmin)
                     ProductsList.Remove(product);
+                else
+                    ProductsList.SingleOrDefault(p => p.ID == product.ID).Quantity = 0;
                 dbContext.SaveChanges();
             }
         }

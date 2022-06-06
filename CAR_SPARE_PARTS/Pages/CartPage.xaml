@@ -21,6 +21,7 @@
             <RowDefinition Height="300*"/>
             <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
+        <TextBlock FontSize="54" Text="Корзина" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
         <ListBox x:Name="cartListBox" Grid.Row="1" SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding CartProducts}" Style="{DynamicResource ListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="96,0,1,0" Grid.ColumnSpan="2" >
             <ListBox.ItemTemplate>
                 <DataTemplate>

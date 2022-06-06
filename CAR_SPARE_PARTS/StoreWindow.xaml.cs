@@ -27,7 +27,6 @@ namespace CAR_SPARE_PARTS
         private int UserID { get; set; }
         private int SelectedIndex { get; set; }
         private bool IsEditMode { get; set; }
-        private bool WasWarning { get; set; }
         public StoreWindow()
         {
             InitializeComponent();
@@ -53,6 +52,7 @@ namespace CAR_SPARE_PARTS
                 deleteItemButton.Visibility = Visibility.Visible;
                 addProductButton.Visibility = Visibility.Visible;
                 editItemButton.Visibility = Visibility.Visible;
+                exportTextBlock.Visibility = Visibility.Visible;
             }
             else
             {
@@ -107,6 +107,8 @@ namespace CAR_SPARE_PARTS
         {
             avp.AddProduct();
             productsListBox.Items.Refresh();
+            productsListBox.SelectedIndex = productsListBox.Items.Count - 1;
+            editItemButton_Click(sender, e);
         }
 
         private void deleteItemButton_Click(object sender, RoutedEventArgs e)
@@ -137,18 +139,26 @@ namespace CAR_SPARE_PARTS
 
         private void editItemButton_Click(object sender, RoutedEventArgs e)
         {
-
-            if (productsListBox.SelectedItem != null)
+            try
             {
-                addToCartGrid.Visibility = Visibility.Hidden;
-                SelectedIndex = productsListBox.SelectedIndex;
-                confirmItemButton.Visibility = Visibility.Visible;
-                editProductBorder.Visibility = Visibility.Visible;
-                IsEditMode = true;
+                avp.SelectedProduct.Quantity = Convert.ToInt32(quantityEditTextBox.Text);
+                avp.SelectedProduct.Price = Convert.ToInt32(quantityEditTextBox.Text);
+                if (productsListBox.SelectedItem != null)
+                {
+                    addToCartGrid.Visibility = Visibility.Hidden;
+                    SelectedIndex = productsListBox.SelectedIndex;
+                    confirmItemButton.Visibility = Visibility.Visible;
+                    editProductBorder.Visibility = Visibility.Visible;
+                    IsEditMode = true;
+                }
+                else
+                {
+                    MessageBox.Show("Вам необходимо выбрать деталь перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Вам необходимо выбрать деталь перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Была вызвана ошибка.\nПодробности:\t{ex.Data}\n\t{ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -194,7 +204,24 @@ namespace CAR_SPARE_PARTS
             goBackTextBlock.Visibility = Visibility.Visible;
         }
 
-        private void DoOrder(object sender, RoutedEventArgs e)
+        private void ExportDataOfOrders(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MessageBoxResult res = MessageBox.Show($"Произвести экспорт данных\"?", "Информация", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (res == MessageBoxResult.Yes)
+                {
+                    OrdersData od = new OrdersData(UserID);
+                    od.ExportOrders();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Непредвиденная ошибка во время экспорта данных.\nОшибка: {ex.Data}\n{ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+            private void DoOrder(object sender, RoutedEventArgs e)
         {
             if (avp.IsCartEmpty())
             {
