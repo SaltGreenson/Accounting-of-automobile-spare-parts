@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
         Title="Магазин" Height="900" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
-        Style="{DynamicResource WindowStyle}">
+        Style="{DynamicResource WindowStyle}"
+        Icon="./images/R.jpg">
     <Grid>
         <Frame Visibility="Hidden" Width="800" Height="800" VerticalAlignment="Bottom" x:Name="_frame" Content="" NavigationUIVisibility="Hidden" Panel.ZIndex="1"/>
         <TextBlock Visibility="Hidden" x:Name="goBackTextBlock" TextDecorations="None" Margin="10, 10, 0, 0" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="36">

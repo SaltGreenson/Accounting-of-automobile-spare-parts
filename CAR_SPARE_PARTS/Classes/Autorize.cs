@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CAR_SPARE_PARTS.Models.User;
-
+using CAR_SPARE_PARTS.Models.Store;
+using CAR_SPARE_PARTS.Models.Order;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace CAR_SPARE_PARTS
 {
@@ -15,6 +18,9 @@ namespace CAR_SPARE_PARTS
         string RepeatPassword { get; set; }
 
         bool IsAdmin { get; set; }
+
+        
+        public Autorize() { }
 
         public Autorize(string login, string password, string repeatPassword, bool isAdmin)
         {
@@ -27,6 +33,20 @@ namespace CAR_SPARE_PARTS
         {
             Login = login;
             Password = password;
+        }
+        public void ConectToDataBase()
+        {
+            try
+            {
+                string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                SqlConnection connection = new SqlConnection(connectionString);
+                connection.Open();
+                connection.Close();
+            }
+            catch
+            {
+                throw new Exception("Не удается подключиться к базе данных");
+            }
         }
 
         public (string,bool, bool, int) SignIn()

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
         Title="Сделать заказ" Height="700" Width="800"
-        Style="{DynamicResource WindowStyle}" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Style="{DynamicResource WindowStyle}" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        Icon="./images/R.jpg">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

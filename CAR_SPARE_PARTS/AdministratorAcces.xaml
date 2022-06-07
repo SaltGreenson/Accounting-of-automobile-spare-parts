@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
         Title="AdministratorAcces" Height="337" Width="408"
-        Style="{DynamicResource WindowStyle}" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Style="{DynamicResource WindowStyle}" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        Icon="./images/R.jpg">
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Введите пароль администратора" VerticalAlignment="Top" Height="78" Width="244" FontFamily="Segoe UI Black" FontSize="28" Foreground="#0077B2"/>
         <PasswordBox x:Name="passwordTextBox" Style="{DynamicResource PasswordBoxStyle}" HorizontalAlignment="Center" FontSize="28" VerticalAlignment="Top" Width="360" Height="36" Margin="0,125,0,0"/>

@@ -15,10 +15,10 @@
         <TextBlock HorizontalAlignment="Left" Margin="62,70,0,0" TextWrapping="Wrap" Text="Логин" VerticalAlignment="Top" Height="49" Width="123" FontFamily="Segoe UI Black" FontSize="36"/>
         <TextBox x:Name="loginTextBox" Style="{DynamicResource TextBoxStyle}" HorizontalAlignment="Left" Margin="62,124,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="664" FontSize="28"/>
         <TextBlock HorizontalAlignment="Left" Margin="62,180,0,0" TextWrapping="Wrap" Text="Пароль" VerticalAlignment="Top" Height="49" Width="149" FontFamily="Segoe UI Black" FontSize="36"/>
-        <TextBlock TextDecorations="None" HorizontalAlignment="Center" Margin="0,376,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontStyle="Italic" FontSize="11">
+        <TextBlock x:Name="registrationHyperLink" HorizontalAlignment="Center" Margin="0,376,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontStyle="Italic" FontSize="11">
             <Hyperlink NavigateUri="SignUp.xaml" TextDecorations="None"><Label Style="{DynamicResource LabelStyle}">Еще не зарегистрированы? Регистрация</Label></Hyperlink>
         </TextBlock>
-        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Авторизация" VerticalAlignment="Top" Height="59" Width="320" FontFamily="Segoe UI Black" FontSize="46" Foreground="#0077B2"/>
+        <TextBlock x:Name="titleTextBlock" HorizontalAlignment="Left" Margin="10,10,10,0" TextWrapping="Wrap" Text="Авторизация" TextAlignment="Center" VerticalAlignment="Top" Height="60" Width="780" FontFamily="Segoe UI Black" FontSize="46" Foreground="#0077B2"/>
         <PasswordBox x:Name="passwordTextBox" Style="{DynamicResource PasswordBoxStyle}" FontSize="28" HorizontalAlignment="Left" Margin="62,234,0,0" VerticalAlignment="Top" Width="664" Height="36"/>
 
     </Grid>

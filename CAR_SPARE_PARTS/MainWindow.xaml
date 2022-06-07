@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CAR_SPARE_PARTS"
         mc:Ignorable="d"
-        Title="Вход" Height="490" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="Вход" Height="490" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
+        Icon="./images/R.jpg">
     
     <Grid>
         <Frame x:Name="_frame" Content="" NavigationUIVisibility="Hidden" Panel.ZIndex="1" Source="Pages/SignIn.xaml"/>
-
     </Grid>
 </Window>

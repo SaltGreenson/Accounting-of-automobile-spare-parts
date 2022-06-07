@@ -24,6 +24,25 @@ namespace CAR_SPARE_PARTS.Pages
         public SignIn()
         {
             InitializeComponent();
+            CheckingAccess();
+        }
+
+        private void CheckingAccess()
+        {
+            try
+            {
+                Autorize a = new Autorize();
+                a.ConectToDataBase();
+            }
+            catch (Exception ex)
+            {
+                registrationHyperLink.IsEnabled = false;
+                enterButton.IsEnabled = false;
+                enterButton.Background = Brushes.LightGray;
+                titleTextBlock.Text = ex.Message;
+                titleTextBlock.FontSize = 24;
+                titleTextBlock.Foreground = Brushes.Red;
+            }
         }
 
         private void Login_click(object sender, RoutedEventArgs e)
