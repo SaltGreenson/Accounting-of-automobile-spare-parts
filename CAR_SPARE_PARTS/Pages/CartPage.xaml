@@ -45,7 +45,7 @@
                         <TextBlock Grid.Column="0" Grid.Row="0" FontSize="16" TextAlignment="Right" VerticalAlignment="Center" Text="BYN" />
                         <TextBlock Name="dateTextBox" FontSize="13" Width="65" Height="25" Grid.Column="0" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" TextAlignment="Left" Text="{Binding Path=Date}" />
                         <TextBlock Name="typeTextBox"  FontSize="13" Height="25" Width="155" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Right" TextAlignment="Right" VerticalAlignment="Bottom" Text="{Binding Path=Type}" />
-                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" Text="В наличии:" Margin="0, 0, 70, 0"/>
+                        <TextBlock Grid.Column="3" Grid.Row="1" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" Text="В корзине:" Margin="0, 0, 70, 0"/>
                         <TextBlock Name="quantityTextBox" Width="35" Grid.Column="3" Grid.Row="1" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0" Text="{Binding Path=Quantity}" />
                         <TextBlock Grid.Column="3" Grid.Row="1" FontSize="14" TextAlignment="Left" HorizontalAlignment="Right" Margin="0, 0, 5, 0" VerticalAlignment="Center" Text="шт."/>
                     </Grid>

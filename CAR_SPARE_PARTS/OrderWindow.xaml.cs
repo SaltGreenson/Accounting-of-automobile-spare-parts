@@ -45,15 +45,15 @@ namespace CAR_SPARE_PARTS
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if  (addressTextBox.Text.Length > 0 && lastNameTextBox.Text.Length > 0 && middleNameTextBox.Text.Length > 0 && nameTextBox.Text.Length > 0 && calendar.DisplayDate != null)
+            if  (addressTextBox.Text.Length > 0 && lastNameTextBox.Text.Length > 0 && middleNameTextBox.Text.Length > 0 && nameTextBox.Text.Length > 0 && calendar.Text.Length > 0)
             {
                 string lastName = lastNameTextBox.Text,
                     name = nameTextBox.Text,
                     middleName = middleNameTextBox.Text,
                     address = addressTextBox.Text;
-                string date = $"{calendar.DisplayDate.Year}-{calendar.DisplayDate.Month}-{calendar.DisplayDate.Day}";
+                string date = calendar.Text;
                 double price = Convert.ToDouble(totalPriceTextBox.Text);
-                MessageBoxResult result = MessageBox.Show($"Конечная стоимость заказа: {price}BYN на {calendar.DisplayDate.Day}.{calendar.DisplayDate.Month}.{calendar.DisplayDate.Year} ({calendar.DisplayDate.DayOfWeek}).\nСовершить заказ?", "Информация",MessageBoxButton.YesNo, MessageBoxImage.Information);
+                MessageBoxResult result = MessageBox.Show($"Конечная стоимость заказа: {price}BYN на {date}.\nСовершить заказ?", "Информация",MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if (result == MessageBoxResult.Yes)
                 {
                     ord.AddOrder(new Order

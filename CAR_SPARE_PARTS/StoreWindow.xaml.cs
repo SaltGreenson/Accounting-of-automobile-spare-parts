@@ -96,10 +96,14 @@ namespace CAR_SPARE_PARTS
             {
                 addToCartGrid.Visibility = Visibility.Hidden;
             }
-            else
+            else if (avp.SelectedProduct != null)
             {
                 addToCartGrid.Visibility = Visibility.Visible;
                 addToCartQuantity.Text = "1";
+            } 
+            else
+            {
+                addToCartGrid.Visibility = Visibility.Hidden;
             }
         }
 
@@ -139,26 +143,26 @@ namespace CAR_SPARE_PARTS
 
         private void editItemButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (avp.SelectedProduct != null)
             {
-                avp.SelectedProduct.Quantity = Convert.ToInt32(quantityEditTextBox.Text);
-                avp.SelectedProduct.Price = Convert.ToInt32(priceEditTextBox.Text);
-                if (productsListBox.SelectedItem != null)
+                try
                 {
+                    avp.SelectedProduct.Quantity = Convert.ToInt32(quantityEditTextBox.Text);
+                    avp.SelectedProduct.Price = Convert.ToInt32(priceEditTextBox.Text);
                     addToCartGrid.Visibility = Visibility.Hidden;
                     SelectedIndex = productsListBox.SelectedIndex;
                     confirmItemButton.Visibility = Visibility.Visible;
                     editProductBorder.Visibility = Visibility.Visible;
                     IsEditMode = true;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Вам необходимо выбрать деталь перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Была вызвана ошибка.\nПодробности:\t{ex.Data}\n\t{ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Была вызвана ошибка.\nПодробности:\t{ex.Data}\n\t{ex.StackTrace}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Вам необходимо выбрать деталь перед редактированием", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -217,7 +221,7 @@ namespace CAR_SPARE_PARTS
 
         private void DisplayReference(object sender, RoutedEventArgs e)
         {
-            string text = "\tИнструкция использования программы\n" +
+            string text = "\tРуководство по использованию\n" +
                 "На рабочем экране вы можете наблюдать:\n" +
                 "  1. Корзина - предназначена для просмотра и редактирования товаров, ранее добавленных в корзину.\n" +
                 "  2. Экспорт данных - выполняет экспорт ранее осуществяемых заказов в MS Word. Эта функция работает только в том случае, если вы являетесь администратором.\n" +
@@ -285,34 +289,39 @@ namespace CAR_SPARE_PARTS
 
         private (string, string, int, string) ParcingText(string text)
         {
+            // объявление регулярных выражений
             Regex titleReg = new Regex(@"[а-я]+");
             Regex quantityReg = new Regex(@"[\d]+\-[\d]+");
             Regex priceReg = new Regex(@"[\d]+byn");
             Regex carBrandReg = new Regex(@"[a-z]+");
+            // объявление строковых переменных
             string productSearchingTitle = "";
             string productSearchingQuantity = "";
             string productSearchingPrice = "";
             string productSearchingCarBrand = "";
             int price = 0;
+            // поиск заголовка комплекта в полученной строковой переменной 
             foreach (Match match in titleReg.Matches(text.ToLower()))
             {
                 productSearchingTitle += match + " ";
             }
+            // поиск количества комплектов в полученной строковой переменной 
             foreach (Match match in quantityReg.Matches(text.ToLower()))
             {
                 productSearchingQuantity += match + " ";
             }
+            // поиск стоимости комплектов в полученной строковой переменной 
             foreach (Match match in priceReg.Matches(text.ToLower()))
             {
                 productSearchingPrice += match + " ";
             }
-
+            // поиск модели автомобилей для комплектов в полученной строковой переменной 
             foreach (Match match in carBrandReg.Matches(text.ToLower()))
             {
                 if (match.ToString().Length >= 4 && match.ToString() != "euro")
                     productSearchingCarBrand += match + " ";
             }
-
+            // конвертация цены, если она существует
             if (productSearchingPrice.Length != 0)
             {
                 price = Convert.ToInt32(productSearchingPrice.Substring(0, productSearchingPrice.Length - 4));
@@ -323,12 +332,14 @@ namespace CAR_SPARE_PARTS
 
         private List<ProductView> CollectProductsByFilters(string title, int minQuantity, int maxQuantity, int price, string carBrand, string fullQuery)
         {
-            List<ProductView> products = new List<ProductView>(avp.GetAllProducts());
+            // объявление переменных
+            List<ProductView> products = new List<ProductView>(avp.GetAllProducts()); // инициализация переменной всеми товарами из базы данных
             List<ProductView> newProducts = new List<ProductView>();
             List<ProductView> templateList = new List<ProductView>();
             if (title.Length > 0)
             {
-                foreach(ProductView p in products.Where(p => p.Title.ToLower().IndexOf(title.ToLower()) != -1))
+                // поиск на совпадение заголовка у товара и фильтра
+                foreach (ProductView p in products.Where(p => p.Title.ToLower().IndexOf(title.ToLower()) != -1))
                 {
                     newProducts.Add(p);   
                 }
@@ -338,6 +349,7 @@ namespace CAR_SPARE_PARTS
                 
                 if (newProducts.Count > 0)
                 {
+                    // выполняем поиск определенного количества комплектов из тех комплектов, которые совпали заголовком с фитром покупателя
                     templateList.Clear();
                     templateList = new List<ProductView>(newProducts);
                     newProducts.Clear();
@@ -348,6 +360,7 @@ namespace CAR_SPARE_PARTS
                 }
                 else
                 {
+                    // выполняем поиск определенного количества комплектов из всех продуктов
                     foreach (ProductView p in products.Where(p => p.Quantity >= minQuantity && p.Quantity <= maxQuantity))
                     {
                         newProducts.Add(p);
@@ -358,6 +371,7 @@ namespace CAR_SPARE_PARTS
             {
                 if (newProducts.Count > 0)
                 {
+                    // выполняем поиск определенной цены комплекта из тех комплектов, которые совпали по предыдущим фильтрам
                     templateList.Clear();
                     templateList = new List<ProductView>(newProducts);
                     newProducts.Clear();
@@ -368,6 +382,7 @@ namespace CAR_SPARE_PARTS
                 }
                 else
                 {
+                    // выполняем поиск определенной цены комплекта из всех продуктов
                     foreach (ProductView p in products.Where(p => p.Price <= price))
                     {
                         newProducts.Add(p);
@@ -379,6 +394,7 @@ namespace CAR_SPARE_PARTS
             {
                 if (newProducts.Count > 0)
                 {
+                    // выполняем поиск определенной модели автомобиля комплекта из тех комплектов, которые совпали по предыдущим фильтрам
                     templateList.Clear();
                     templateList = new List<ProductView>(newProducts);
                     newProducts.Clear();
@@ -389,7 +405,7 @@ namespace CAR_SPARE_PARTS
                 }
                 else
                 {
-
+                    // выполняем поиск определенной модели автомобиля комплекта из всех продуктов
                     foreach (ProductView p in products.Where(p => p.CarBrand.ToLower().IndexOf(carBrand.ToLower()) != -1))
                     {
                         newProducts.Add(p);
@@ -401,61 +417,80 @@ namespace CAR_SPARE_PARTS
 
         private void searchProductButton_Click(object sender, RoutedEventArgs e)
         {
-            if (searchTextBox.Text == "Поиск")
+            addToCartGrid.Visibility = Visibility.Hidden;
+            if (!IsEditMode)
             {
-                avp.ProductsList.Clear();
-                foreach (ProductView p in avp.GetAllProducts())
+                // если текст ялвяется "стандартым" по значению, то будет отображен весь список комплектов
+                if (searchTextBox.Text == "Поиск")
                 {
-                    avp.ProductsList.Add(p);
+                    // очистка текущего списка для отображения
+                    avp.ProductsList.Clear();
+                    foreach (ProductView p in avp.GetAllProducts())
+                    {
+                        avp.ProductsList.Add(p);
+                    }
+                    sortComboBox.SelectedIndex = 0;
                 }
-                sortComboBox.SelectedIndex = 0;
+                else
+                {
+                    // получаем кортеж значений из функции ParsingText, эта функция возвращает заголовок, количество, цену комплекта и модель автомобиля
+                    (string, string, int, string) summaryQuery = ParcingText(searchTextBox.Text);
+                    // объявление строковых переменных
+                    string title = summaryQuery.Item1;
+                    string quantityInterval = summaryQuery.Item2;
+                    int minQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
+                    int maxQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
+                    int price = summaryQuery.Item3;
+                    string carBrand = summaryQuery.Item4;
+                    // очистка списка товаров из UI
+                    avp.ProductsList.Clear();
+                    // получение товаров по заданным ранее фильтрам и поплнение списка товаров в UI
+                    foreach (ProductView pr in CollectProductsByFilters(title, minQuantity, maxQuantity, price, carBrand, searchTextBox.Text))
+                    {
+                        avp.ProductsList.Add(pr);
+                    }
+
+                }
+                // отображение элемента UI об отсутствии комплектов по заданным параметрам
+                if (avp.ProductsList.Count <= 0)
+                {
+                    captionProductItems.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    captionProductItems.Visibility = Visibility.Hidden;
+                }
+                // обновления листа отображения товаров
+                productsListBox.Items.Refresh();
             }
             else
             {
-                (string, string, int, string) summaryQuery = ParcingText(searchTextBox.Text);
-                string title = summaryQuery.Item1;
-                string quantityInterval = summaryQuery.Item2;
-                int minQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
-                int maxQuantity = quantityInterval.Length > 0 ? Convert.ToInt32(quantityInterval.Split('-')[0]) : 0;
-                int price = summaryQuery.Item3;
-                string carBrand = summaryQuery.Item4;
-                avp.ProductsList.Clear();
-                foreach (ProductView pr in CollectProductsByFilters(title, minQuantity, maxQuantity, price, carBrand, searchTextBox.Text))
-                {
-                    avp.ProductsList.Add(pr);
-                }
-                
+                MessageBox.Show("Для начала вам нужно сохранить изменения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            if (avp.ProductsList.Count <= 0)
-            {
-                captionProductItems.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                captionProductItems.Visibility = Visibility.Hidden;
-            }
-            productsListBox.Items.Refresh();
         }
         private void addProductToCart_Click(object sender, RoutedEventArgs e)
         {
-            int quantity;
-            try
+            if (avp.SelectedProduct != null)
             {
-                quantity = Convert.ToInt32(addToCartQuantity.Text);
+                int quantity;
+                try
+                {
+                    quantity = Convert.ToInt32(addToCartQuantity.Text);
+                }
+                catch
+                {
+                    quantity = 1;
+                }
+                string title = avp.SelectedProduct.Title;
+                quantity = quantity >= 1 ? quantity : 1;
+                quantity = quantity <= avp.SelectedProduct.Quantity ? quantity : avp.SelectedProduct.Quantity;
+                addToCartQuantity.Text = quantity.ToString();
+                avp.AddProductToCart(quantity);
+                productsListBox.Items.Refresh();
+                MessageBox.Show($"В корзину было добавлено \"{title}\": {quantity}шт.\nЧтобы перейти в корзину нажмите на икноку \"Корзина\"", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                addToCartGrid.Visibility = Visibility.Hidden;
+                addToCartQuantity.Text = "";
             }
-            catch
-            {
-                quantity = 1;
-            }
-            string title = avp.SelectedProduct.Title;
-            quantity = quantity >= 1 ? quantity : 1;
-            quantity = quantity <= avp.SelectedProduct.Quantity ? quantity : avp.SelectedProduct.Quantity;
-            addToCartQuantity.Text = quantity.ToString();
-            avp.AddProductToCart(quantity);
-            productsListBox.Items.Refresh();
-            MessageBox.Show($"В корзину было добавлено \"{title}\": {quantity}шт.\nЧтобы перейти в корзину нажмите на икноку \"Корзина\"", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
-            addToCartGrid.Visibility = Visibility.Hidden;
-            addToCartQuantity.Text = "";
         }
 
         private void TextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

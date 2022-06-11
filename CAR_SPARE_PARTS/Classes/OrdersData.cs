@@ -68,7 +68,11 @@ namespace CAR_SPARE_PARTS.Classes
                 InsertParagraph(document, "Заказы выполненные за все время", "Обычный", alignment: WdParagraphAlignment.wdAlignParagraphCenter);
                 InsertOrderTable(document, dbContext.Orders.OrderByDescending(p => p.PriceOfOrder).ToList());
             }
-            document.SaveAs2(@"C:\Users\vladi\OneDrive\Рабочий стол");
+            try
+            {
+                document.SaveAs2(@"C:\Users\vladi\OneDrive\Рабочий стол");
+            }
+            catch { }
         }
 
         private void InsertParagraph(Document document, string text, string styleType, WdParagraphAlignment alignment = WdParagraphAlignment.wdAlignParagraphLeft, WdColor color = WdColor.wdColorBlack)
